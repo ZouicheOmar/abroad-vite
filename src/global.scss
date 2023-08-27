@@ -5,16 +5,28 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap');
+
+$main-color: #fef286;
+$seconday-color: #b3fed1;
+$third-color: #a4adfe;
+$fourth-color: #fff5fb;
+$fifth-color: #dbffc7;
+
+// $color-background: #020213;
+$color-background: #020213;
+$color-text: #d2d1fa;
+$color-primary: #9a3cec;
+$color-secondary: #250424;
+$color-accent: #b011ab;
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  // color-scheme: light dark;
-  // color: rgba(255, 255, 255, 0.87);
-  // background-color: #242424;
-
+  background-color: $color-background;
+  color: $color-text;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -28,6 +40,10 @@
 div {
   margin: 0;
   padding: 0;
+}
+
+svg {
+  fill: $color-text;
 }
 
 a {
@@ -52,37 +68,10 @@ h1 {
   line-height: 1.1;
 }
 
-// button {
-//   border-radius: 8px;
-//   border: 1px solid transparent;
-//   padding: 0.6em 1.2em;
-//   font-size: 1em;
-//   font-weight: 500;
-//   font-family: inherit;
-//   background-color: #1a1a1a;
-//   cursor: pointer;
-//   transition: border-color 0.25s;
-// }
-// button:hover {
-//   border-color: #646cff;
-// }
-// button:focus,
-// button:focus-visible {
-//   outline: 4px auto -webkit-focus-ring-color;
-// }
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-}
-
 .container {
   position: relative;
+  padding: 0;
+  margin: 0;
   min-width: 100vw;
   min-height: 100vh;
   display: flex;

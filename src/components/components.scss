@@ -1,5 +1,8 @@
 /** @format */
 $DM: 'DM Serif Text';
+$jost: 'Jost', sans-serif;
+$grotesk: 'Space Grotesk', sans-serif;
+
 $rounded: 0.5rem;
 $blur: 24px;
 
@@ -8,45 +11,50 @@ $md: 768px;
 $lg: 1024px;
 $xl: 1280px;
 
-$card_w: 20rem;
-$card_h: 30rem;
 $margin-from-navbar: 3rem;
 
-$main-color: #e2d43c;
-$seconday-color: #2535df;
-$green-color: #75d56d;
-$dark-green-color: #3e7a38;
-$dark-color: #273626;
+$color-background: #020213;
+$color-text: #d2d1fa;
+$color-primary: #9a3cec;
+$color-secondary: #1e1525;
+$color-secondary-2: #170425;
+$color-accent: #b011ab;
+
+$bg-layer-0: #020213;
+$bg-layer-1: #161628;
+$bg-layer-2: #232332;
+$bg-layer-3: rgba(57, 57, 75, 0.7);
 
 $shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-$backdrop: brightness(130%) blur(24px);
-
+$backdrop: blur(24px);
+* {
+  font-family: $grotesk;
+}
 *:hover {
   cursor: default;
 }
-
+svg:hover {
+  cursor: pointer;
+}
 @mixin flex-col-center($gap: 1rem) {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: $gap;
 }
-
-@mixin shadow-backdrop {
-  box-shadow: $shadow;
-  backdrop-filter: $backdrop;
+@mixin shadow {
+  -webkit-box-shadow: 0 3px 13px 7px $color-text; /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow: 0 3px 13px 7px $color-text; /* 0 3px 13px 7px $color-text;*/
+  box-shadow: 0 5px 13px 10px rgb(210 209 250 / 0.1);
 }
-
 @mixin font-size($size: 1rem) {
   font-size: $size;
-  //   line-height: calc($size + 0.2rem);
   line-height: calc($size);
 }
-
 @mixin title {
-  padding: 1rem;
-  display: inline-block;
-  font-family: 'DM Serif Text';
+  // padding: 0.8rem 0 0.8rem 0;
+  padding: 0.8rem 0 0.2rem 0;
+  font-weight: bold;
   @include font-size(1.5rem);
   @media (min-width: $md) {
     @include font-size(3rem);
@@ -54,23 +62,35 @@ $backdrop: brightness(130%) blur(24px);
 }
 .navbar {
   position: fixed;
-  z-index: 100;
+  z-index: 30;
   display: flex;
   justify-content: space-between;
-  padding: 1rem;
+  align-items: center;
+  padding: 0 0.5rem 0 0.5rem;
   width: 100vw;
-  background-color: $main-color;
-  font-family: $DM;
-  @media (min-width: $md) {
-    background-color: green;
+  backdrop-filter: blur(24px);
+  filter: brightness(1.3);
+  span {
+    cursor: pointer;
+    font-size: xx-large;
+    font-family: $DM;
+    color: white;
+  }
+  li:hover {
+    background-color: rgba(35, 35, 35, 0.7);
+    transition: all 100ms ease-in-out;
   }
 }
-
-.homepage {
+.page {
   @include flex-col-center(2rem);
   margin-top: $margin-from-navbar;
   width: 90vw;
-  min-height: 100vh;
+  // min-height: 100vh;
+  min-height: 70vh;
+}
+
+.title {
+  @include title;
 }
 
 .imgloop {
@@ -79,7 +99,6 @@ $backdrop: brightness(130%) blur(24px);
   flex-direction: column;
   width: 100vw;
   min-height: 15rem;
-  @include shadow-backdrop;
   @media (min-width: $md) {
     min-height: 30rem;
   }
@@ -88,10 +107,12 @@ $backdrop: brightness(130%) blur(24px);
     margin-left: auto;
     margin-right: auto;
     border-radius: 0.5rem;
-    width: fit-content;
-    padding: 1rem;
+    width: 50%;
+    padding: 0.5rem;
     z-index: 20;
-    @include shadow-backdrop;
+    backdrop-filter: $backdrop;
+    background-color: rgba(0, 0, 0, 0.4);
+    filter: brightness(1.3);
     @media (min-width: $md) {
       left: 1rem;
       top: 0;
@@ -100,18 +121,26 @@ $backdrop: brightness(130%) blur(24px);
       font-size: 3.75rem;
       line-height: 1;
       text-align: center;
-      font-family: 'DM Serif Text';
-      font-weight: 400;
+      // font-weight: 400;
       font-display: swap;
       @media (max-width: 680px) {
         font-size: 2rem;
       }
+      span {
+        font-family: $DM;
+        font-weight: 500;
+        background: linear-gradient(
+          343deg,
+          rgba(154, 60, 236, 1) 0%,
+          rgba(176, 17, 171, 1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
     }
     .subtitle {
-      font-size: 1.3rem;
-      font-weight: 500;
-      line-height: 2rem;
-      padding-left: 0.3rem;
+      line-height: 1rem;
+      text-align: center;
     }
   }
   .imgloop_loop {
@@ -145,49 +174,35 @@ $backdrop: brightness(130%) blur(24px);
 
 .presentation {
   width: 100%;
-  min-height: 20rem;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  gap: 0.5rem;
+  padding: 1rem 0.5rem 1rem 0.5rem;
   margin-left: auto;
   margin-right: auto;
-
-  .title {
-    // padding: 1rem;
-    // display: inline-block;
-    // font-family: 'DM Serif Text';
-    // @include font-size(1.5rem);
-    // @media (min-width: $md) {
-    //   @include font-size(3rem);
-    // }
-    @include title;
-  }
+  border-radius: $rounded;
+  background-color: $color-secondary;
   .body {
+    padding: 1rem 0.5rem 1rem 0.5rem;
     width: 100%;
-    min-height: fit-content;
+    min-height: min-content;
     display: grid;
     grid-template-rows: 50% 50%;
     grid-template-columns: 50% 50%;
-    gap: 0.5rem;
+    gap: 0.8rem;
     div {
+      width: 95%;
+      min-height: min-conent;
       display: flex;
       flex-direction: column;
-      padding: 0.5rem;
-      display: inline-block;
-      border-radius: 0.7rem;
       svg {
         margin-left: auto;
         margin-right: auto;
-        fill: $dark-green-color;
-        width: 3rem;
-        height: 3rem;
+        width: 2.5rem;
+        height: 2.5rem;
       }
       p {
         text-align: center;
-        margin-top: 1rem;
-        line-height: 1.27rem;
+        margin-top: 0.5rem;
+        line-height: 1.1rem;
+        max-height: fit-content;
       }
     }
   }
@@ -195,55 +210,49 @@ $backdrop: brightness(130%) blur(24px);
 
 .upcoming {
   min-height: fit-content;
-  .title {
-    @include title;
-    padding: 0 0 0 2rem;
-  }
   .body {
     position: relative;
     width: 100vw;
     min-height: fit;
-    padding: 1rem;
+    padding: 0 1rem 0 1rem;
     display: flex;
     flex-wrap: nowrap;
     gap: 0.5rem;
     overflow-y: hidden;
   }
 }
-
 .card {
   position: relative;
-  @include flex-col-center;
-  justify-content: end;
+  @include flex-col-center(0.4rem);
+  justify-content: flex-end;
   align-items: center;
-  min-width: 70vw;
-  height: 35vh;
+  // min-width: 70vw;
+  // height: 35vh;
+  min-width: 70%;
+  height: 30vh;
   overflow: hidden;
   border-radius: $rounded;
-  padding: 1rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
   transition: all 150ms ease-out;
-  box-shadow: 10px 10px 15px -5px rgb(0 0 0 / 0.5),
-    0 8px 10px -6px rgb(0 0 0 / 0.1);
+
   &:hover {
     transform: scale(1.02);
     cursor: default;
   }
   .card-describe {
     z-index: 10;
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
-      0 8px 10px -6px rgb(0 0 0 / 0.1);
     backdrop-filter: blur($blur);
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: $rounded;
     padding: 0.5rem;
     transition: all 100ms ease-out;
     &:hover {
-      backdrop-filter: brightness(120%) blur($blur);
+      backdrop-filter: blur($blur);
       color: green;
       transform: scale(1.05);
       cursor: default;
     }
     .card_title {
-      font-family: 'DM Serif Text';
       line-height: 1.5rem;
       font-weight: bold;
       font-size: 1.5rem;
@@ -256,10 +265,129 @@ $backdrop: brightness(130%) blur(24px);
   }
   img {
     position: absolute;
-    top: 0px;
-    height: fit-content;
-    object-fit: cover;
+    top: 0;
     z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.eventsofdate {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.upcoming-dates-body {
+  position: relative;
+  width: 100vw;
+  padding: 0 1rem 0 1rem;
+  // display: flex;
+  // flex-wrap: nowrap;
+  gap: 0.5rem;
+  overflow-y: hidden;
+}
+.upcoming-dates-date {
+  background-color: $color-secondary;
+  @include flex-col-center(0.3rem);
+  border-radius: $rounded;
+  height: fit-content;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  span {
+    line-height: 1rem;
+  }
+}
+.eventcardmd {
+  position: relative;
+  width: 90vw;
+  margin: 0.5rem auto 0.5rem auto;
+  // height: 30vh;
+  height: 24vh;
+  border: solid 0.5px $bg-layer-3;
+  border-radius: $rounded;
+  overflow: hidden;
+  box-shadow: 0px 4px 5px 0px hsla(0, 0%, 0%, 0.14),
+    0px 1px 10px 0px hsla(0, 0%, 0%, 0.12),
+    0px 2px 4px -1px hsla(0, 0%, 0%, 0.2);
+  img {
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .eventcardmd-details {
+    // padding: 0.5rem 1rem 0.5rem 1rem;
+    padding: 0.5rem;
+    width: 100%;
+    background: linear-gradient(
+      180deg,
+      rgba(154, 60, 236, 0) 0%,
+      $color-secondary-2 50%
+    );
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    .eventcardmd-details-title {
+      font-size: x-large;
+      line-height: 1.75rem;
+    }
+    .eventcardmd-details-date {
+      // line-height: 1.2rem;
+      line-height: 1.5rem;
+      color: yellow;
+    }
+    .eventcardmd-details-place {
+      line-height: 1.2rem;
+    }
+    .eventcardmd-tags {
+      margin: 0.5rem 0 0 0;
+      width: 100vw;
+      display: flex;
+      gap: 0.2rem;
+    }
+  }
+}
+
+.event-card-tag {
+  border-radius: 5px;
+  padding: 0.1rem 0.5rem 0.1rem 0.5rem;
+  background-color: $color-background;
+}
+
+.eventcardxs {
+  position: relative;
+  // height: 30vh;
+  img {
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .eventcardmd-details {
+    // padding: 0.5rem 1rem 0.5rem 1rem;
+    padding: 0.5rem;
+    width: 100%;
+    background: linear-gradient(
+      180deg,
+      rgba(154, 60, 236, 0) 0%,
+      $color-secondary-2 70%
+    );
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    .eventcardmd-details-title {
+      font-size: x-large;
+      line-height: 1.75rem;
+    }
   }
 }
 
@@ -270,7 +398,7 @@ $backdrop: brightness(130%) blur(24px);
   margin-left: 1rem;
   padding: 0.5rem 0.5rem 0 0.5rem;
   border-radius: 0.5rem 0.5rem 0 0;
-  background-color: beige;
+  background-color: $color-secondary;
   &:after {
     content: '';
     position: absolute;
@@ -281,7 +409,7 @@ $backdrop: brightness(130%) blur(24px);
     background-image: radial-gradient(
       circle at 9px 2px,
       rgba(0, 0, 0, 0) 6px,
-      beige 7px
+      $color-secondary 7px
     );
   }
   &:before {
@@ -294,24 +422,23 @@ $backdrop: brightness(130%) blur(24px);
     background-image: radial-gradient(
       circle at 1px 3px,
       rgba(0, 0, 0, 0) 6px,
-      beige 0px
+      $color-secondary 0px
     );
   }
 }
-
 .footer-title-container {
-  background-color: white;
+  background-color: $color-background;
 }
 .footer {
+  background-color: $color-secondary;
+
   max-width: 100vw;
   min-height: fit-content;
-  background-color: beige;
   margin-top: 3rem;
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
   padding: 0 0 1rem 0;
-
   .footer-item {
     min-width: 100vw;
     min-height: fit-content;
@@ -343,64 +470,182 @@ $backdrop: brightness(130%) blur(24px);
   }
 }
 
-.calendar-container {
-  @include flex-col-center;
-  padding: 0.5rem;
-  width: 95vw;
+.winkicon {
+  fill: yellow;
+}
+.coffeeicon {
+  fill: brown;
+}
+.busicon {
+  fill: green;
+}
+.hearticon {
+  fill: red;
+}
+
+.shadowPage {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.pagename {
+  width: 100%;
+  // height: 80px;
+  margin: 16px 0 0 0;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  overflow: hidden;
+  border-radius: $rounded;
+  filter: contrast(150%) brightness(250%);
   p {
-    font-family: $DM;
-    font-size: 1.3rem;
+    font-size: x-large;
+    font-weight: bold;
   }
-  .calendar-body {
+}
+
+.nicebutton {
+  padding: 2rem;
+  width: 75%;
+  margin: auto;
+  text-align: center;
+  font-size: x-large;
+  font-weight: bold;
+  color: white;
+  font-weight: normal;
+  border-radius: $rounded;
+  filter: contrast(150%) brightness(200%);
+  &:hover {
+    cursor: pointer;
+  }
+  transition: all 150ms ease-out;
+  background: linear-gradient(
+      35deg,
+      rgba(54, 65, 159, 0.7),
+      rgba(91, 3, 135, 0.9)
+    ),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 234 234' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='8.83' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  &:active {
+    transform: scale(1.03);
+  }
+  &:hover {
+    transform: scale(1.03);
+  }
+}
+
+.smallnicebutton {
+  padding: 2rem;
+  // width: 75%;
+  margin: auto;
+  text-align: center;
+  font-size: x-large;
+  font-weight: bold;
+  color: white;
+  font-weight: normal;
+  border-radius: $rounded;
+  filter: contrast(150%) brightness(200%);
+  &:hover {
+    cursor: pointer;
+  }
+  transition: all 150ms ease-out;
+  background: linear-gradient(
+      35deg,
+      rgba(54, 65, 159, 0.7),
+      rgba(91, 3, 135, 0.9)
+    ),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 234 234' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='8.83' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  &:active {
+    transform: scale(1.03);
+  }
+  &:hover {
+    transform: scale(1.03);
+  }
+}
+
+.block {
+  width: 100%;
+  min-height: fit-content;
+  padding: 0 0.5rem 1rem 0.5rem;
+  border: solid 0.5px $bg-layer-3;
+  background-color: $bg-layer-1;
+  border-radius: $rounded;
+  p {
+    line-height: 1.3rem;
+    padding-left: 0.4rem;
+  }
+  .title {
+    // @include title;
+    padding-left: 0.2rem;
+    padding-top: 0.8rem;
+  }
+  form {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     display: flex;
     flex-direction: column;
-    width: 90vw;
-    padding: 0 0.5rem 0 0.5rem;
-    .calendar-days {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      p {
-        font-size: 1.2rem;
-      }
-    }
-    .calendar-dates {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      align-items: center;
-      min-height: 25vh;
-      span {
-        font-family: 'Arial Narrow Bold', sans-serif;
-        text-align: center;
-        margin: 1px;
-        &:hover {
-          color: white;
-          background-color: #273626;
-          border-radius: $rounded;
-        }
-      }
-    }
+    gap: 1rem;
+  }
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    // margin-left: 1rem;
+    background-color: inherit;
+    border: solid 0.5px $bg-layer-3;
+    border-radius: $rounded;
+    cursor: pointer;
+  }
+  .input-file {
+    width: 100%;
+    height: 30%;
+  }
+  textarea {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: inherit;
+    border: solid 0.5px $bg-layer-3;
+    border-radius: $rounded;
+    cursor: auto;
   }
 }
-
-.calendarAndEvent {
-  display: flex;
-  flex-direction: column;
-  min-width: 95vw;
-  background-color: #f0fdfa;
-  border-radius: $rounded;
-  // box-shadow: $shadow;
-  box-shadow: -10px 20px 25px -5px rgb(0 0 0 / 0.3),
-    -10px 8px 10px -6px rgb(0 0 0 / 0.1);
-  // @include shadow-backdrop;
-  overflow: hidden;
+.section {
+  min-width: 100%;
 }
 
-.eventInCalendar {
+.radio {
+  background-color: red;
+}
+
+.barcard {
   position: relative;
   width: 100%;
-  min-height: 30vh;
-  background-color: #f0fdfa;
-  border-top: solid 0.5px black;
+  max-height: fit-content;
+  margin: 0.4rem auto 0.4rem auto;
+  border: solid 0.5px $bg-layer-3;
+  box-shadow: 0px 4px 5px 0px hsla(0, 0%, 0%, 0.14),
+    0px 1px 10px 0px hsla(0, 0%, 0%, 0.12),
+    0px 2px 4px -1px hsla(0, 0%, 0%, 0.2);
+  border-radius: $rounded;
+  overflow: hidden;
+  font-size: small;
+  .barcard-info {
+    position: relative;
+    z-index: 10;
+    padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+    background: linear-gradient(
+      -90deg,
+      rgba(0, 0, 0, 0) 0%,
+      $color-secondary 80%
+    );
+    .barcard-title {
+      font-size: medium;
+    }
+    p {
+      padding-left: unset;
+    }
+  }
   img {
     position: absolute;
     top: 0;
@@ -409,143 +654,410 @@ $backdrop: brightness(130%) blur(24px);
     height: 100%;
     object-fit: cover;
   }
-  .title {
-    position: relative;
-    width: fit-content;
-    margin: 19% auto auto auto;
+}
+
+.datepicker {
+  width: 100%;
+  padding: 0.4rem;
+  background-color: $bg-layer-1;
+  border: solid 0.5px $bg-layer-3;
+  border-radius: $rounded;
+  font-size: large;
+  box-shadow: 0px 4px 5px 0px hsla(0, 0%, 0%, 0.14),
+    0px 1px 10px 0px hsla(0, 0%, 0%, 0.12),
+    0px 2px 4px -1px hsla(0, 0%, 0%, 0.2);
+
+  .datepicker-header {
+    font-size: 1.5rem;
     padding: 0.5rem;
-    z-index: 10;
-    font-weight: 600;
-    font-family: $DM;
-    font-size: 2rem;
-    border-radius: $rounded;
-    backdrop-filter: $backdrop;
   }
-  .gradient-blur {
-    position: absolute;
-    z-index: 5;
+  .datepicker-body {
     width: 100%;
+    .datepicker-body-days {
+      padding: 1rem 0 1rem 0;
+      display: grid;
+      grid-template-columns: auto repeat(6, auto);
+      justify-content: space-around;
+      place-items: center;
+      border-top: solid 0.5px $bg-layer-3;
+      border-bottom: solid 0.5px $bg-layer-3;
+      span {
+        min-height: 1.5rem;
+        min-width: 2.5rem;
+        max-width: 3.2rem;
+        padding: 0.2rem;
+        border: solid 0.5px rgba(42, 42, 42, 0.7);
+        background-color: $bg-layer-2;
+        text-align: center;
+        border-radius: $rounded;
+        font-size: medium;
+      }
+    }
+    .datepicker-body-dates {
+      padding: 0.5rem 0 0.5rem 0;
+      height: 100%;
+      display: grid;
+      grid-template-rows: repeat(6, auto);
+      grid-template-columns: auto repeat(6, auto);
+      align-items: stretch;
+      place-items: center;
+      row-gap: 0.5rem;
+      span {
+        height: 3.2rem;
+        min-width: 2.5rem;
+        max-width: 3.2rem;
+        padding: 0.2rem;
+        border: solid 0.5px rgba(42, 42, 42, 0.7);
+        text-align: center;
+        border-radius: $rounded;
+        background-color: $bg-layer-2;
+        transition: all linear 200ms;
+        user-select: none;
+        &:hover {
+          background-color: $bg-layer-3;
+          border: solid 0.5px rgba(42, 42, 42, 1);
+          cursor: pointer;
+        }
+        &:active {
+          background-color: rgba(40, 40, 40, 1);
+          border: solid 0.5px rgba(42, 42, 42, 1);
+          cursor: pointer;
+        }
+      }
+      .start0 {
+        grid-column-start: 0;
+      }
+      .start1 {
+        grid-column-start: 1;
+      }
+      .start2 {
+        grid-column-start: 2;
+      }
+      .start3 {
+        grid-column-start: 3;
+      }
+      .start4 {
+        grid-column-start: 4;
+      }
+      .start5 {
+        grid-column-start: 5;
+      }
+      .start6 {
+        grid-column-start: 6;
+      }
+      .picked {
+        background-color: rgba(80, 80, 80, 1);
+        color: yellow;
+      }
+    }
+  }
+}
+
+.filters {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+.filter-button {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 1rem;
+  margin: 0.2rem;
+  background-color: $bg-layer-1;
+  border-radius: $rounded;
+  transition: all 100 ease-out;
+  cursor: pointer;
+
+  svg {
+    display: inline;
+    margin: 0 0.4rem 0.2rem 0.2rem;
+  }
+  &:active {
+    background-color: $bg-layer-2;
+    transform: scale(1.05);
+  }
+}
+.citypicker {
+  position: absolute;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 1rem;
+  width: 50%;
+  li {
+    font-size: large;
+    padding: 0.4rem;
+    border-radius: $rounded;
+    transition: background-color 100ms ease-in-out;
+    margin: 1px;
+  }
+  li:hover {
+    background-color: rgba(30, 30, 30, 0.9);
+    border: solid 0.5px $bg-layer-3;
+    cursor: pointer;
+  }
+}
+.datepickerfilter {
+  position: absolute;
+  z-index: 50;
+  min-width: 85%;
+  max-width: 90%;
+  padding: 0.4rem;
+  background-color: rgba(0, 0, 0, 0.9);
+  border: solid 0.5px $bg-layer-3;
+  border-radius: $rounded;
+  .datepickerfilter-header {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+  }
+  .datepickerfilter-body {
+    width: 100%;
+    .datepickerfilter-body-days {
+      padding: 1rem 0 1rem 0;
+      display: grid;
+      grid-template-columns: auto repeat(6, auto);
+      justify-content: space-around;
+      place-items: center;
+      border-top: solid 0.5px $bg-layer-3;
+      border-bottom: solid 0.5px $bg-layer-3;
+      span {
+        min-height: 1.5rem;
+        min-width: 2.5rem;
+        max-width: 3.2rem;
+        padding: 0.2rem;
+        border: solid 0.5px rgba(42, 42, 42, 0.7);
+        background-color: $bg-layer-2;
+        text-align: center;
+        border-radius: $rounded;
+        font-size: medium;
+      }
+    }
+    .datepickerfilter-body-dates {
+      padding: 0.5rem 0 0.5rem 0;
+      height: 100%;
+      display: grid;
+      grid-template-rows: repeat(6, auto);
+      grid-template-columns: auto repeat(6, auto);
+      align-items: stretch;
+      place-items: center;
+      row-gap: 0.5rem;
+      span {
+        height: 3.2rem;
+        min-width: 2.5rem;
+        max-width: 3.2rem;
+        padding: 0.2rem;
+        border: solid 0.5px rgba(42, 42, 42, 0.7);
+        text-align: center;
+        border-radius: $rounded;
+        background-color: $bg-layer-2;
+        transition: all linear 200ms;
+        user-select: none;
+        &:hover {
+          background-color: $bg-layer-3;
+          border: solid 0.5px rgba(42, 42, 42, 1);
+          cursor: pointer;
+        }
+        &:active {
+          background-color: rgba(40, 40, 40, 1);
+          border: solid 0.5px rgba(42, 42, 42, 1);
+          cursor: pointer;
+        }
+      }
+      .start0 {
+        grid-column-start: 0;
+      }
+      .start1 {
+        grid-column-start: 1;
+      }
+      .start2 {
+        grid-column-start: 2;
+      }
+      .start3 {
+        grid-column-start: 3;
+      }
+      .start4 {
+        grid-column-start: 4;
+      }
+      .start5 {
+        grid-column-start: 5;
+      }
+      .start6 {
+        grid-column-start: 6;
+      }
+      .picked {
+        background-color: rgba(80, 80, 80, 1);
+        color: yellow;
+      }
+    }
+  }
+}
+
+.midcardb {
+  position: relative;
+  width: 100%;
+  min-height: 12rem;
+  margin: 0.4rem auto 0.4rem auto;
+  border: solid 0.5px $bg-layer-3;
+  box-shadow: 0px 4px 5px 0px hsla(0, 0%, 0%, 0.14),
+    0px 1px 10px 0px hsla(0, 0%, 0%, 0.12),
+    0px 2px 4px -1px hsla(0, 0%, 0%, 0.2);
+  border-radius: $rounded;
+  overflow: hidden;
+  color: white;
+  .midcardb-info {
+    width: 100%;
+    position: absolute;
     bottom: 0;
-    height: 65%;
-    pointer-events: none;
-  }
-  .gradient-blur > div,
-  .gradient-blur::before,
-  .gradient-blur::after {
-    position: absolute;
-    inset: 0;
-  }
-  .gradient-blur::before {
-    content: '';
-    z-index: 1;
-    backdrop-filter: blur(0.5px);
-    mask: linear-gradient(
-      to bottom,
+    z-index: 10;
+    padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+    background: linear-gradient(
+      180deg,
       rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 1) 12.5%,
-      rgba(0, 0, 0, 1) 25%,
-      rgba(0, 0, 0, 0) 37.5%
+      $color-secondary 80%
     );
-  }
-  .gradient-blur > div:nth-of-type(1) {
-    z-index: 2;
-    backdrop-filter: blur(1px);
-    mask: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 12.5%,
-      rgba(0, 0, 0, 1) 25%,
-      rgba(0, 0, 0, 1) 37.5%,
-      rgba(0, 0, 0, 0) 50%
-    );
-  }
-  .gradient-blur > div:nth-of-type(2) {
-    z-index: 3;
-    backdrop-filter: blur(2px);
-    mask: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 25%,
-      rgba(0, 0, 0, 1) 37.5%,
-      rgba(0, 0, 0, 1) 50%,
-      rgba(0, 0, 0, 0) 62.5%
-    );
-  }
-  .gradient-blur > div:nth-of-type(3) {
-    z-index: 4;
-    backdrop-filter: blur(4px);
-    mask: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 37.5%,
-      rgba(0, 0, 0, 1) 50%,
-      rgba(0, 0, 0, 1) 62.5%,
-      rgba(0, 0, 0, 0) 75%
-    );
-  }
-  .gradient-blur > div:nth-of-type(4) {
-    z-index: 5;
-    backdrop-filter: blur(8px);
-    mask: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 50%,
-      rgba(0, 0, 0, 1) 62.5%,
-      rgba(0, 0, 0, 1) 75%,
-      rgba(0, 0, 0, 0) 87.5%
-    );
-  }
-  .gradient-blur > div:nth-of-type(5) {
-    z-index: 6;
-    backdrop-filter: blur(16px);
-    mask: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 62.5%,
-      rgba(0, 0, 0, 1) 75%,
-      rgba(0, 0, 0, 1) 87.5%,
-      rgba(0, 0, 0, 0) 100%
-    );
-  }
-  .details {
-    padding: 0.5rem 1rem 0 1rem;
-    position: absolute;
-    z-index: 20;
-    font-weight: 500;
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    .tags {
-      min-width: 100vw;
-      display: flex;
-      margin: 0 0 0 0.5rem;
-      gap: 0.2rem;
+    .midcardb-title {
+      font-size: large;
+    }
+    p {
+      font-size: small;
+      padding-left: unset;
+    }
+    .midcardb-tags {
+      width: 100%;
+      font-size: x-small;
       button {
-        background-color: #e2d43c;
-        border-radius: 9999px;
-        padding: 0.1rem 0.5rem 0.1rem 0.5rem;
-        border: solid 1px black;
+        background-color: black;
+        // padding: 7px 6px 6px 6px;
+        padding: 6px;
+        border-radius: $rounded;
+        border: solid 0.5px $bg-layer-3;
       }
     }
-    div {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      p {
-        font-size: 1.1rem;
-        color: white;
-      }
-      svg {
-        display: inline-block;
-        fill: white;
-        width: 1.1rem;
-        height: 1.1rem;
+    .midcardb-share {
+      position: absolute;
+      right: 0.8rem;
+      top: 1.6rem;
+      font-size: small;
+      button {
+        background-color: black;
+        // padding: 7px 6px 6px 6px;
+        padding: 6px;
+        border-radius: 100%;
+        border: solid 0.5px $bg-layer-3;
       }
     }
   }
-  // .gradient-blur > div:nth-of-type(6) {
-  //   z-index: 7;
-  //   backdrop-filter: blur(32px);
-  //   mask: linear-gradient(
-  //     to bottom,
-  //     rgba(0, 0, 0, 0) 75%,
-  //     rgba(0, 0, 0, 1) 87.5%,
-  //     rgba(0, 0, 0, 1) 100%
-  //   );
-  // }
+  img {
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+a {
+  text: white;
+}
+
+.eventbanner {
+  position: relative;
+  width: 100%;
+  height: 25vh;
+  margin: 0.4rem auto 0.4rem auto;
+  border: solid 0.5px $bg-layer-3;
+  box-shadow: 0px 4px 5px 0px hsla(0, 0%, 0%, 0.14),
+    0px 1px 10px 0px hsla(0, 0%, 0%, 0.12),
+    0px 2px 4px -1px hsla(0, 0%, 0%, 0.2);
+  border-radius: $rounded;
+  overflow: hidden;
+  font-size: small;
+  .eventbanner-info {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+    background: linear-gradient(
+      -90deg,
+      rgba(0, 0, 0, 0) 0%,
+      $color-secondary 80%
+    );
+
+    p {
+      padding-left: unset;
+    }
+  }
+  img {
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.citySelector {
+  margin: 0.5rem;
+  padding: 1rem;
+  background-color: $bg-layer-2;
+  border-radius: $rounded;
+}
+
+.cityItem {
+}
+
+.SwitchRoot {
+  width: 42px;
+  height: 25px;
+  background-color: var(--black-a9);
+  border-radius: 9999px;
+  position: relative;
+  box-shadow: 0 2px 10px var(--black-a7);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.SwitchRoot:focus {
+  background-color: blue;
+  box-shadow: 0 0 0 2px black;
+}
+.SwitchRoot[data-state='checked'] {
+  background-color: red;
+}
+
+.SwitchThumb {
+  display: block;
+  width: 21px;
+  height: 21px;
+  background-color: white;
+  border-radius: 9999px;
+  box-shadow: 0 2px 2px var(--black-a7);
+  transition: transform 100ms;
+  transform: translateX(2px);
+  will-change: transform;
+}
+.SwitchThumb[data-state='checked'] {
+  transform: translateX(19px);
+}
+
+@keyframes opacity-animation-on {
+  from {
+    transform: translateY(1%);
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes opacity-animation-off {
+  from {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(1%);
+    opacity: 0;
+  }
 }

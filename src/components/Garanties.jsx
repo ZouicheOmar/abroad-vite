@@ -1,40 +1,30 @@
 /** @format */
 
-import {DoorIcon, MakeFriendsIcon, DiscroverIcon, CoolIcon} from './Icons'
+import {BusIcon, HeartIcon, CoffeeIcon, WinkIcon} from './Icons'
 
 function Garanties() {
   return (
     <>
-      <div className="presentation">
-        <p className="title">Who is ABROAD ?</p>
-        <div className="body">
-          <div>
-            <DoorIcon />
-            <p>
-              Amet nisi culpa ad culpa ex exercitation sunt ad irure quis
-              deserunt qui non.
-            </p>
-          </div>
-          <div>
-            <MakeFriendsIcon />
-            <p>
-              Amet nisi culpa ad culpa ex exercitation sunt ad irure quis
-              deserunt qui non.
-            </p>
-          </div>
-          <div>
-            <DiscroverIcon />
-            <p>
-              Amet nisi culpa ad culpa ex exercitation sunt ad irure quis
-              deserunt qui non.
-            </p>
-          </div>
-          <div>
-            <CoolIcon />
-            <p>
-              Amet nisi culpa ad culpa ex exercitation sunt ad irure quis
-              deserunt qui non.
-            </p>
+      <div>
+        <p className="title">ABROAD is in charge</p>
+        <div className="presentation">
+          <div className="body">
+            <div>
+              <CoffeeIcon />
+              <p>Organizing the whole event</p>
+            </div>
+            <div>
+              <BusIcon />
+              <p>All transports and commuting</p>
+            </div>
+            <div>
+              <WinkIcon />
+              <p>Taking care of the worries</p>
+            </div>
+            <div>
+              <HeartIcon />
+              <p>Make you fall in love with the city</p>
+            </div>
           </div>
         </div>
       </div>
