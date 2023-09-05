@@ -1,108 +1,115 @@
 /** @format */
-import {useEffect} from 'react'
-import {StripePayementComponent} from '../functions/stripeStore'
-import {CardElement, useElements, useStripe} from '@stripe/react-stripe-js'
-import {supabase} from '../functions/functions'
-
+import CardPaymentComponent from '../components/PaymentForm'
 import {Button} from '../@/components/ui/button'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../@/components/ui/accordion'
+import {Input} from '../@/components/ui/input'
+import {Label} from '../@/components/ui/label'
 
-const StyledCardElement = () => {
-  const cardElementOptions = {
-    style: {
-      base: {
-        color: 'white',
-        iconColor: '#94a3b8',
-        '::placeholder': {
-          color: '#94a3b8',
-        },
-      },
-      invalid: {},
-      complete: {
-        iconColor: '#22c55e',
-      },
-    },
-    hidePostalCode: true,
-    iconStyle: 'solid',
-  }
+import {PersonStanding} from 'lucide-react'
 
+const PaymentPageSmallCard = () => {
   return (
-    <CardElement
-      options={cardElementOptions}
-      className="border-[1px] rounded border-slate-600 p-2"
-    />
+    <>
+      <div className="w-full ring-[1px] ring-slate-700 rounded p-4 flex">
+        <img
+          src="./img.jpg"
+          className="w-[8rem] h-[8rem] object-cover rounded inline"
+        />
+        <div className="inline w-3/4 px-2">
+          <p className="text-white text-xl smallTitleBold ">
+            Boad Party | Palavas les Flots
+          </p>
+          <p className="text-slate-200">Saturday Sep. 9th, 11:00 PM</p>
+          <p className="text-slate-200">Carnon plage</p>
+        </div>
+      </div>
+    </>
   )
 }
 
-const PayementComponent = () => {
-  const elements = useElements()
-  const stripe = useStripe()
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    if (!stripe && !elements) {
-      console.log('failed loading strip or elements')
-      console.log('calling stripe returns : ', stripe)
-      console.log('calling elements returns : ', elements)
-      return
-    }
-
-    const cardElement = elements.getElement(CardElement)
-
-    const {error, paymentMethod} = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-    })
-
-    if (error) {
-      console.log('error in stripe.paymentMethod : ', error)
-      return
-    }
-
-    /**
-     * If paymentMethod, only means that the payment method is okay
-     * the user didn't actually pay yet
-     */
-
-    console.log('paymentMethod : ', paymentMethod)
-
-    /**if paymentmethod, stripe.paymentIntent(paymentMethod.details)
-     * here <e fire an edge function to make the axios post call
-     * All i need to do is to know how to create an edge function
-     *
-     */
-
-    // const DATA_TO_SEND = {
-    //   name: 'raz al ghoul',
-    // }
-    // const {data, error} = await supabase.functions.invoke('hello-world', {
-    //   body: JSON.stringify(DATA_TO_SEND),
-    // })
-    // if (error) {
-    //   console.log('error calling the edge function :', error)
-    // }
-    // console.log('edge function called :', data)
-  }
-
+const PaymentPagePaymentFlow = () => {
   return (
     <>
-      <div className="w-full p-2">
-        {/* <StripePayementComponent> */}
-        <form onSubmit={handleSubmit} className="flex flex-col">
-          <p className="text-white mb-2">payment form starts here</p>
-          <StyledCardElement />
-          {/* <CardElement
-            options={cardElementOptions}
-            className="border-[1px] rounded border-slate-600 p-2"
-          /> */}
-          <Button
-            type="submit"
-            className="w-fit border-[1px] rounded my-2 self-center hover:cursor-pointer hover:border-[2px]"
-          >
-            PAY
-          </Button>
-        </form>
-        {/* </StripePayementComponent> */}
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full ring-[1px] ring-slate-700 rounded p-2 flex flex-col  justify-items-center "
+      >
+        <div className="flex min-w-full justify-items-center justify-start pl-2   ">
+          <span className="min-h-full w-fit flex flex-col pb-2 mr-1 scale-[1.13] pt-2  ">
+            <PersonStanding />
+          </span>
+          <div className="leading-none">
+            <span className="h-full self-center  smallDesc text-white text-lg">
+              By Day : Meet at Gare Saint-Roch at 9:00 PM
+            </span>
+            <br />
+            <span className="h-full self-center  smallDesc text-slate-300">
+              x 1 ticket
+            </span>
+          </div>
+        </div>
+        <div className="w-[99%] text-white text-lg font-bold mr-auto ml-auto ring-1 rounded flex justify-between p-2 mt-2">
+          <span>TOTAL : </span>
+          <span>99€</span>
+        </div>
+        <AccordionItem value="item-1" className="border-none ">
+          <AccordionTrigger chevron={false}>
+            <Button
+              variant="custom"
+              className="w-full bg-amber-500 text-black rounded-full smallDesc hover:cursor-pointer hover:bg-amber-400   "
+            >
+              Payment
+            </Button>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="flex gap-2 ">
+              <div className="w-full">
+                <Label htmlFor="first_name">First Name</Label>
+                <Input
+                  name="first_name"
+                  type="text"
+                  placeholder="John"
+                  required
+                  className="rounded text-slate-400"
+                />
+              </div>
+              <div className="w-full">
+                <Label htmlFor="last_name">Last Name</Label>
+                <Input
+                  name="last_name"
+                  type="text"
+                  placeholder="DOE"
+                  required
+                  className="rounded text-slate-400"
+                />
+              </div>
+            </div>
+            <Label htmlFor="email">Your email</Label>
+            <Input
+              name="email"
+              type="email"
+              placeholder="johnDoe@gmail.com"
+              required
+              className="rounded text-slate-400 mb-[0.35rem]"
+            />
+
+            <span className="">Card info</span>
+            <CardPaymentComponent />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <div className="w-full font-thin  p-2">
+        <p>
+          After buying the ticket, you'll revieve a QR code by mail, which
+          you'll be able to find on your profile page too
+        </p>
       </div>
     </>
   )
@@ -111,11 +118,12 @@ const PayementComponent = () => {
 function PaywallPage() {
   return (
     <>
-      <div className="page">
-        <p className="title">Paywall page</p>
-        <StripePayementComponent>
-          <PayementComponent />
-        </StripePayementComponent>
+      <div className="flex flex-col items-center gap-2 mt-[3rem] w-[92%] min-h-[70vh]">
+        <p className="title">Tickets</p>
+        <div className="flex flex-col items-center gap-2 mt-[2rem] w-full">
+          <PaymentPageSmallCard />
+          <PaymentPagePaymentFlow />
+        </div>
       </div>
     </>
   )
