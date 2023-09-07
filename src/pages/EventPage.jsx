@@ -240,7 +240,7 @@ function EventPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    checkIfCurrentUserIsIn()
+    user && checkIfCurrentUserIsIn()
     getListOfParticipants()
   }, [])
 

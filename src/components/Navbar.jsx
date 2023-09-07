@@ -1,5 +1,5 @@
 /** @format */
-import {useCallback, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import './components.scss'
 import {supabase} from '../functions/functions'
@@ -162,7 +162,8 @@ const NavbarMenu = () => {
 
 const UserInNavbar = () => {
   const navigate = useNavigate()
-  const user = useUser()
+  const {user} = useUser()
+
   const handleLogout = useCallback(async () => {
     const {error} = supabase.auth.signOut()
     error && console.log('error loging out : ', error.message)
@@ -173,18 +174,22 @@ const UserInNavbar = () => {
     console.log('user data : ', user)
     navigate(`/logpage/${user.id}`)
   })
+
   return (
     <>
-      <Button onClick={handleGoToUserPage} asChild>
-        User
-      </Button>
-      <Button
-        className="text-sm border-[1px] rounded px-2 hover:bg-slate-900 cursor-pointer"
+      <p
+        className="text-sm leading-none hover:cursor-pointer border-[1px] rounded p-1 w-fit h-fit truncate "
+        onClick={handleGoToUserPage}
+      >
+        {user.first_name} <br />
+        {user.last_name}
+      </p>
+      <p
+        className="text-sm min-h-full border-[1px] rounded px-2 hover:bg-slate-900 cursor-pointer"
         onClick={handleLogout}
-        asChild
       >
         log out
-      </Button>
+      </p>
     </>
   )
 }
@@ -242,7 +247,7 @@ function Navbar() {
           <span className="navbar-title">ABROAD</span>
         </Link>
         <div className="z-50 flex gap-2 items-center">
-          {user !== null && <UserInNavbar />}
+          {user && <UserInNavbar />}
           <NavbarMenu />
         </div>
       </div>

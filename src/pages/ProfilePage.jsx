@@ -5,6 +5,13 @@
  * will have to get all user data from profiles table
  */
 import {useUser} from '../context/userStore'
+import {useState, useCallback, useEffect} from 'react'
+import {supabase} from '../functions/functions'
+import {useNavigate} from 'react-router-dom'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
 
 import {Title} from '../components/UIComponents'
 import {Separator} from '../@/components/ui/separator'
@@ -13,10 +20,10 @@ import {SmallEventCard} from '../components/Cards'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '../@/components/ui/tabs'
 import {Input} from '../@/components/ui/input'
 import {Button} from '../@/components/ui/button'
-import {supabase} from '../functions/functions'
-import {useState, useCallback} from 'react'
 
 const TabsWindows = () => {
+  const {user} = useUser()
+
   return (
     <TabsList className="w-full p-0 m-0">
       <TabsTrigger
@@ -31,6 +38,14 @@ const TabsWindows = () => {
       >
         Account
       </TabsTrigger>
+      {user.user_role === 'manager' && (
+        <TabsTrigger
+          value="manage"
+          className="w-full m-0 data-[state=inactive]:text-slate-600 data-[state=active]:scale-[120%]"
+        >
+          Manage
+        </TabsTrigger>
+      )}
     </TabsList>
   )
 }
@@ -186,12 +201,89 @@ const AccountTab = () => {
   )
 }
 
+const ManagerEventSmallCard = ({item}) => {
+  return (
+    <div className="w-full px-2 py-1 border-slate-900 border-[1px] rounded bg-black text-white smallDesc hover:bg-neutral-900 transition-colors">
+      <div className="min-w-full flex justify-between ">
+        <p className="smallDesc text-lg text-yellow-300">{item.name}</p>
+        <span className="smallDesc text-slate-300">{item.city}</span>
+      </div>
+      <div className="w-full flex justify-between">
+        <div className="flex gap-2">
+          <span className="smallDesc">
+            {dayjs(item.date).format('dd MMM D')},
+          </span>
+          <span className="smallDesc">
+            {' '}
+            {dayjs(`${item.date}${item.time}`).format('HH:mm')}{' '}
+          </span>
+        </div>
+        <span className="smallDesc">{item.type}</span>
+      </div>
+    </div>
+  )
+}
+
+const ManageTab = () => {
+  const {userManagedEvents} = useUser()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log('from manageTab : ', userManagedEvents)
+  }, [])
+
+  return (
+    <TabsContent value="manage" className="flex justify-center">
+      <div className=" flex flex-col gap-2 items-center w-[90%] border-[1px] border-slate-700 rounded p-2 px-4 text-white ">
+        <div
+          className="w-full"
+          onClick={() => {
+            console.log(userManagedEvents)
+          }}
+        >
+          <p className="smallDesc">The events you are managing</p>
+        </div>
+
+        {userManagedEvents &&
+          userManagedEvents.map((item, index) => {
+            return <ManagerEventSmallCard item={item} key={index} />
+          })}
+
+        <Separator className="bg-slate-500" />
+
+        <div className="w-full">
+          <p className="smallDesc my-1 ">
+            Got an idea and a plan for a new event ?
+          </p>
+          <Button
+            variant="custom"
+            onClick={() => {
+              navigate('/createevent')
+            }}
+            className="text-start smallDesc bg-slate-700 w-full rounded text-md border-slate-500 border-[1px] hover:cursor-pointer "
+          >
+            Create an event
+          </Button>
+          <Separator className="bg-slate-500 my-2" />
+        </div>
+
+        <div className="w-full">
+          <p className="smallDesc text-slate-500">Modify an event</p>
+        </div>
+      </div>
+    </TabsContent>
+  )
+}
+
 const PageTabs = () => {
+  const {user} = useUser()
+
   return (
     <Tabs defaultValue="events" className="max-w-full p-0 mx-2 rounded ">
       <TabsWindows />
       <EventsTab />
       <AccountTab />
+      {user.user_role === 'manager' && <ManageTab />}
     </Tabs>
   )
 }

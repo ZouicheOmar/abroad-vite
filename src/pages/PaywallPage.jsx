@@ -1,4 +1,13 @@
 /** @format */
+import {useLocation} from 'react-router-dom'
+import {useEvent} from '../functions/functions'
+import {useEffect} from 'react'
+
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
+
 import CardPaymentComponent from '../components/PaymentForm'
 import {Button} from '../@/components/ui/button'
 import {
@@ -12,27 +21,34 @@ import {Label} from '../@/components/ui/label'
 
 import {PersonStanding} from 'lucide-react'
 
-const PaymentPageSmallCard = () => {
+const PaymentPageSmallCard = ({data, img}) => {
   return (
     <>
       <div className="w-full ring-[1px] ring-slate-700 rounded p-4 flex">
         <img
-          src="./img.jpg"
+          src={img}
           className="w-[8rem] h-[8rem] object-cover rounded inline"
         />
-        <div className="inline w-3/4 px-2">
+        <div className="inline w-3/4 px-2 flex flex-col justify-between">
           <p className="text-white text-xl smallTitleBold ">
-            Boad Party | Palavas les Flots
+            {data.name} | {data.city}
           </p>
-          <p className="text-slate-200">Saturday Sep. 9th, 11:00 PM</p>
-          <p className="text-slate-200">Carnon plage</p>
+          <div className="leading-tight">
+            <p className="text-slate-200 smallDesc">
+              {dayjs(data.date).format('dddd MMM D')},
+              {dayjs(`${data.date}${data.time}`).format('HH:mm')}
+            </p>
+            <p className="text-slate-200 smallDesc">
+              {data.location ? data.location : 'Meeting point'}
+            </p>
+          </div>
         </div>
       </div>
     </>
   )
 }
 
-const PaymentPagePaymentFlow = () => {
+const PaymentPagePaymentFlow = ({data}) => {
   return (
     <>
       <Accordion
@@ -45,8 +61,12 @@ const PaymentPagePaymentFlow = () => {
             <PersonStanding />
           </span>
           <div className="leading-none">
-            <span className="h-full self-center  smallDesc text-white text-lg">
+            {/* <span className="h-full self-center  smallDesc text-white text-lg">
               By Day : Meet at Gare Saint-Roch at 9:00 PM
+            </span> */}
+            <span className="h-full self-center  smallDesc text-white text-lg">
+              {data.meeting_point ? data.meeting_point : 'meeting point'}, at{' '}
+              {data.meeting_time ? data.meeting_time : '9:00PM'}
             </span>
             <br />
             <span className="h-full self-center  smallDesc text-slate-300">
@@ -56,10 +76,10 @@ const PaymentPagePaymentFlow = () => {
         </div>
         <div className="w-[99%] text-white text-lg font-bold mr-auto ml-auto ring-1 rounded flex justify-between p-2 mt-2">
           <span>TOTAL : </span>
-          <span>99€</span>
+          <span>{data.price ? data.price : '0€'}</span>
         </div>
         <AccordionItem value="item-1" className="border-none ">
-          <AccordionTrigger chevron={false}>
+          <AccordionTrigger chevron="false">
             <Button
               variant="custom"
               className="w-full bg-amber-500 text-black rounded-full smallDesc hover:cursor-pointer hover:bg-amber-400   "
@@ -116,15 +136,20 @@ const PaymentPagePaymentFlow = () => {
 }
 
 function PaywallPage() {
+  const location = useLocation()
+  const {data, loading, error, img} = useEvent(location.state.id)
+
   return (
     <>
-      <div className="flex flex-col items-center gap-2 mt-[3rem] w-[92%] min-h-[70vh]">
-        <p className="title">Tickets</p>
-        <div className="flex flex-col items-center gap-2 mt-[2rem] w-full">
-          <PaymentPageSmallCard />
-          <PaymentPagePaymentFlow />
+      {data && (
+        <div className="flex flex-col items-center gap-2 mt-[3rem] w-[92%] min-h-[70vh]">
+          <p className="title">Tickets</p>
+          <div className="flex flex-col items-center gap-2 mt-[2rem] w-full">
+            <PaymentPageSmallCard data={data} img={img} />
+            <PaymentPagePaymentFlow data={data} />
+          </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

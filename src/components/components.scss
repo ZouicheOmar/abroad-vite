@@ -80,6 +80,12 @@ svg:hover {
     background-color: rgba(35, 35, 35, 0.7);
     transition: all 100ms ease-in-out;
   }
+  .user-span {
+    cursor: pointer;
+    // font-size: xx-large;
+    font-family: $DM;
+    color: white;
+  }
 }
 .page {
   @include flex-col-center(2rem);

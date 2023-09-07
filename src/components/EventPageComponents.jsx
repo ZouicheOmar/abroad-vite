@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import {useLocation} from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
 import {supabase, useEvent} from '../functions/functions'
 import {useUser} from '../context/userStore'
 
@@ -32,7 +32,7 @@ export const HeaderBody = ({data}) => {
   return (
     <div className="flex justify-between">
       <div className="">
-        <p className="text-xl">{dayjs(date).format('dddd MMMM D')}</p>
+        <p className="text-xl"> {dayjs(date).format('dddd MMMM D')} </p>
         <p className="text-yellow-400">
           {dayjs(`${date}${time}`).format('HH:mm')}
         </p>
@@ -174,6 +174,7 @@ export const Participants = ({list}) => {
 
 export const Join = ({event_id, setJoined}) => {
   const {user} = useUser()
+  const navigate = useNavigate()
   const handleJoinEventClick = async () => {
     console.log('in join button', user.id, ' event id :', event_id)
     console.log
@@ -192,9 +193,17 @@ export const Join = ({event_id, setJoined}) => {
     setJoined(true)
     return data
   }
+  const handleRedirectToPaywallPage = () => {
+    window.scrollTo(0, 0)
+    navigate('../../paywallTest', {
+      state: {
+        id: event_id,
+      },
+    })
+  }
 
   return (
-    <div className="nicebutton" onClick={handleJoinEventClick}>
+    <div className="nicebutton" onClick={handleRedirectToPaywallPage}>
       <p className="text-slate-400">Join</p>
     </div>
   )

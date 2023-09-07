@@ -3,6 +3,7 @@
  * - re add email confirmation
  */
 
+import {useState} from 'react'
 import {supabase} from '../functions/functions'
 
 import AuthCard from '../components/AuthComponents'
@@ -56,7 +57,7 @@ const SignupCard = () => {
       first_name: first_name,
       last_name: last_name,
       email: email,
-      role: 'user',
+      role: 'participant',
     })
 
     if (ADD_USER_TO_TABLE.error) {
@@ -128,6 +129,7 @@ const SignupCard = () => {
 
 const LoginCard = () => {
   const navigate = useNavigate()
+  const [loginMessage, setLoginMessage] = useState(null)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -145,7 +147,7 @@ const LoginCard = () => {
       password: password,
     })
     if (error) {
-      console.log(error)
+      setLoginMessage('The email or password you have entered is invalid')
       return
     }
     window.scrollTo(0, 0)
@@ -166,7 +168,10 @@ const LoginCard = () => {
               type="email"
               id="email"
               placeholder="dupont@hotmail.com"
-              className="rounded text-slate-400"
+              className="rounded placeholder:text-slate-400 text-white"
+              onChange={(e) => {
+                e.target.value !== loginMessage && setLoginMessage(null)
+              }}
             />
             <Label htmlFor="password">Password</Label>
             <Input
@@ -174,8 +179,14 @@ const LoginCard = () => {
               type="password"
               id="password"
               placeholder="********"
-              className="rounded text-slate-400"
+              className="rounded placeholder:text-slate-400 text-white"
+              onChange={() => loginMessage && setLoginMessage(null)}
             />
+            {loginMessage && (
+              <p className=" p-2 rounded mt-2 border-red-600 bg-red-900 bg-opacity-50 text-red-500 text-xs">
+                {loginMessage}
+              </p>
+            )}
             <div className="flex flex-col justify-items-center">
               <Button
                 type="submit"
