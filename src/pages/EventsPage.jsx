@@ -13,7 +13,7 @@ function EventsPage() {
   const [defaultEvents, setDefaultEvents] = useState(null)
 
   return (
-    <div className="page">
+    <div className="page md:w-fit">
       <Title title={'Events'} />
 
       {error && <p>There's been an error loading your events..</p>}
@@ -33,11 +33,12 @@ function EventsPage() {
             <Filters />
           </EventsContext.Provider>
           <div className="section">
-            <p className="title mb-2">Events on 🔥🔥🔥</p>
-
-            {data.map((item, index) => {
-              return <MidCardB data={item} key={index} />
-            })}
+            <p className="title mb-2 text-center">Events on 🔥🔥🔥</p>
+            <div className=" md:grid md:grid-cols-2 md:w-[35rem] md:min-w-[47rem] md:max-w-[48rem] ">
+              {data.map((item, index) => {
+                return <MidCardB data={item} key={index} />
+              })}
+            </div>
           </div>
         </>
       )}

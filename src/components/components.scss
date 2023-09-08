@@ -2,6 +2,7 @@
 $DM: 'DM Serif Text';
 $jost: 'Jost', sans-serif;
 $grotesk: 'Space Grotesk', sans-serif;
+$chivo: 'Chivo', sans-serif;
 
 $rounded: 0.5rem;
 $blur: 24px;
@@ -29,6 +30,7 @@ $shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 $backdrop: blur(24px);
 * {
   font-family: $grotesk;
+  // font-family: $chivo;
 }
 *:hover {
   cursor: default;
@@ -573,10 +575,11 @@ svg:hover {
 
 .block {
   width: 100%;
+  font-family: $chivo;
   min-height: fit-content;
   padding: 0 0.5rem 1rem 0.5rem;
-  border: solid 0.5px $bg-layer-3;
-  background-color: $bg-layer-1;
+  // border: solid 0.5px $bg-layer-3;
+  // background-color: $bg-layer-1;
   border-radius: $rounded;
   p {
     line-height: 1.3rem;
@@ -901,7 +904,10 @@ svg:hover {
 
 .midcardb {
   position: relative;
-  width: 100%;
+  // width: 100%;
+  // width: 70%;
+  min-width: 22rem;
+  max-width: 23rem;
   min-height: 12rem;
   margin: 0.4rem auto 0.4rem auto;
   border: solid 0.5px $bg-layer-3;

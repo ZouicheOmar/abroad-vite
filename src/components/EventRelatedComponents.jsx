@@ -37,7 +37,7 @@ export const MidCardB = ({data}) => {
     getImg()
   })
   return (
-    <div className="midcardb ">
+    <div className="midcardb sm:w-[70%]">
       <Link to={`${id}`} style={{color: 'inherit', textDecoration: 'inherit'}}>
         <div className="midcardb-info">
           <p className="midcardb-title">{name}</p>
