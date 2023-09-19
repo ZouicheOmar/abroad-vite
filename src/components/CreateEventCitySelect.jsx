@@ -24,7 +24,9 @@ function CreateEventCitySelect() {
     <label htmlFor="city" className="bg-inherit ">
       Choose a city:
       <Select
-        //    onValueChange={(value) => handleValueChange(value)}
+        onValueChange={(value, e) => {
+          console.log(value)
+        }}
         name="city"
       >
         <SelectTrigger className="w-full rounded border-[1px] border-slate-800 data-[placeholder]:text-slate-400 text-md">
@@ -35,8 +37,8 @@ function CreateEventCitySelect() {
         </SelectTrigger>
         <SelectContent className="bg-slate-950  rounded border-[1px] border-slate-800 text-md text-white">
           <CityItem item="montpellier" />
-          <CityItem item="Geneva" />
-          <CityItem item="Lausanne" />
+          <CityItem item="geneva" />
+          <CityItem item="lausanne" />
         </SelectContent>
       </Select>
     </label>

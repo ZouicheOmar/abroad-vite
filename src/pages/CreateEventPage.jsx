@@ -1,117 +1,17 @@
 /** @format */
 import {useState} from 'react'
-import {createClient} from '@supabase/supabase-js'
 import {supabase} from '../functions/functions'
+import {stripeNode} from '../utils/stripe'
 
 import {v4 as uuidv4} from 'uuid'
 import {useNavigate} from 'react-router-dom'
 
 import {SaveIcon, ShareIcon, PlusIcon, XIcon} from '../components/Icons'
+import LocationOfTheEvent from '../components/create event components/LocationOfTheEvent'
 import EventTypeToggleGroup from '../components/EventTypeToggleGroup'
 import CreateEventCitySelect from '../components/CreateEventCitySelect'
 
-// const supabaseUrl = 'https://bfybtqxgnnnzbcxynyvt.supabase.co'
-// const supabaseKey =
-//   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmeWJ0cXhnbm5uemJjeHlueXZ0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4NDc2MjQzMiwiZXhwIjoyMDAwMzM4NDMyfQ.K5gyt8afxXaeKlbyZ8DpgWJ7IvPQDbE-TLrrTSKgMLE' //! service key, not anon key
-// const supabase = createClient(supabaseUrl, supabaseKey)
-
-const uploadImg = async (img) => {
-  const avatarFile = img
-  const {error} = await supabase.storage
-    .from('images')
-    .upload('images_folder/event2img.png', avatarFile)
-  error && console.log(error)
-}
-const sendEventData = async (datajson) => {
-  const {name, date, created_by, city} = datajson
-  const {error} = await supabase.from('events').insert({
-    name: name,
-    date: date,
-    created_by: created_by,
-    city: city,
-    img_url: 'images_folder/event2img.png',
-  })
-  error && console.log(error)
-}
-const insertEvent = async () => {
-  const {data, error} = await supabase.from('events').select()
-  data && console.log(data)
-  error && console.log(error)
-}
-
-const MidCardB = ({data}) => {
-  const {name, date, type, img} = data
-  return (
-    <div className="midcardb">
-      <div className="midcardb-info">
-        <p className="midcardb-title">{name}</p>
-        <p>{date}</p>
-        <div className="midcardb-tags">
-          <button>{type}</button>
-        </div>
-        <div className="midcardb-share">
-          <button>
-            <SaveIcon />
-          </button>
-          <button>
-            <ShareIcon />
-          </button>
-        </div>
-      </div>
-      <img src="./img2.jpg" alt="tropisme" className="card_img" />
-    </div>
-  )
-}
-
-const Tags = ({state, typeState}) => {
-  const {tags, setTags} = state
-  const {type, setType} = typeState
-  const [shine, setShine] = useState()
-
-  const handleClick = (e, prop) => {
-    e.preventDefault()
-    e.stopPropagation()
-    const prev = tags
-    Object.keys(tags).map((item) => {
-      item === prop ? (prev[item] = !tags[item]) : (prev[item] = false)
-    })
-    setTags({...tags, prev})
-    setType(prop)
-    setShine(prop)
-    console.log('type : ', type)
-  }
-
-  const Tag = ({name}) => {
-    const prop = name.replace(' ', '').toLowerCase()
-    return (
-      <button
-        className={`bg-black py-1 px-2 rounded-md w-fit border-[1px] border-slate-800 mt-1 ml-1 hover:cursor-pointer hover:bg-gray-900 hover:border-slate-700 ${
-          type === name && 'bg-gray-900'
-        }`}
-        onClick={(e) => handleClick(e, name)}
-      >
-        {name}
-      </button>
-    )
-  }
-
-  return (
-    <>
-      <div className="min-h-fit min-w-full grid-flow-row ">
-        <Tag name="Night Out" />
-        <Tag name="Trip" />
-        <Tag name="City Tour" />
-        <Tag name="Food Tour" />
-        <Tag name="Hike" />
-        <Tag name="Party" />
-        <Tag name="Boat Party" />
-        <Tag name="House Party" />
-      </div>
-    </>
-  )
-}
-
-const AddButton = ({add}) => {
+export const AddButton = ({add}) => {
   return (
     <button
       className=" flex justify-center w-1/2 ml-auto mr-auto py-2 bg-sky-900 rounded hover:bg-sky-800 hover:cursor-pointer "
@@ -130,21 +30,7 @@ const NameYourEvent = () => {
         type="text"
         name="name"
         placeholder="Name of your event"
-        // required
-      />
-    </label>
-  )
-}
-
-const LocationOfTheEvent = () => {
-  return (
-    <label>
-      Where are you organizing an event ?
-      <input
-        type="text"
-        name="location"
-        placeholder="a particular club, place.."
-        // required
+        required
       />
     </label>
   )
@@ -162,7 +48,7 @@ const HowMuch = () => {
           step="0.01"
           min="0"
           max="1000"
-          // // required
+          required
         />
         <span className="ml-2 pt-2 text-xl inline align-middle">€</span>
       </div>
@@ -177,11 +63,11 @@ const WhenIsYourEvent = () => {
       <input
         type="text"
         name="date"
-        // required
         placeholder="MM/DD/YYYY"
         onFocus={(e) => {
           e.target.type = 'date'
         }}
+        required
       />
     </label>
   )
@@ -195,7 +81,7 @@ const WhatTimeIsYourEvent = () => {
         type="text"
         name="timestamp"
         placeholder="00:00"
-        // required
+        required
         onFocus={(e) => {
           e.target.type = 'time'
         }}
@@ -208,17 +94,114 @@ const WhatTimeIsYourEvent = () => {
   )
 }
 
-const WhereDoYouMeet = () => {
+const ShowMeetingPoint = ({data, data_manage}) => {
+  const {meetingPoint, setMeetingPoint} = data
+
+  const init_state = {
+    place_name: '',
+    address: '',
+    zipcode_and_city: '',
+    description: '',
+  }
+
+  const handleClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    data_manage(init_state)
+    setMeetingPoint(null)
+  }
+
   return (
-    <label>
-      Where do you plan to meet with participants ?
-      <input
-        type="text"
-        name="meeting_point"
-        placeholder="Train station, club entry, city center..."
-        // required
-      />
-    </label>
+    <div className="relative w-full border-[1px] p-2 leading-tight border-indigo-950 rounded ">
+      <p className="font-bold">Meeting point : </p>
+      <p>{meetingPoint.place_name}</p>
+      <p>{meetingPoint.address}</p>
+      <p>{meetingPoint.zipcode_and_city}</p>
+      <p>{meetingPoint.description}</p>
+
+      <button
+        className="hover:cursor-pointer absolute top-0 mt-1 right-2  box-border rounded hover:bg-red-700 hover:border-red-900 scale-75 border-[0.5px] border-neutral-800 px-2"
+        onClick={handleClick}
+      >
+        <XIcon />
+      </button>
+    </div>
+  )
+}
+
+const WhereDoYouMeet = ({value_data}) => {
+  const init_state = {
+    place_name: '',
+    address: '',
+    zipcode_and_city: '',
+    description: '',
+  }
+  const [state, setState] = useState(init_state)
+  const {meetingPoint, setMeetingPoint} = value_data
+
+  const addMeetingPoint = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setMeetingPoint({...state})
+    console.log('meeting point state : ', state)
+    console.log('meeting point : ', meetingPoint)
+  }
+
+  return (
+    <>
+      <label className="flex flex-col gap-1">
+        Where do you plan to meet with participants ?
+        {!meetingPoint && (
+          <>
+            <input
+              type="text"
+              name="meeting_point_place_name"
+              placeholder="A certain train station, "
+              onChange={(e) => setState({...state, place_name: e.target.value})}
+              value={state.place_name}
+              className="focus:text-white-500"
+              autoComplete="off"
+              required
+            />
+            <input
+              type="text"
+              name="meeting_point_adress"
+              placeholder="11 Rue Pagezy"
+              value={state.address}
+              autoComplete="off"
+              onChange={(e) => setState({...state, address: e.target.value})}
+            />
+            <input
+              type="text"
+              name="meeting_point_zipcode_and_city"
+              placeholder="34000, Montpellier"
+              autoComplete="off"
+              value={state.zipcode_and_city}
+              onChange={(e) =>
+                setState({...state, zipcode_and_city: e.target.value})
+              }
+            />
+            <p>Add further description to the meeting point</p>
+            <input
+              type="text"
+              name="meeting_point_description"
+              placeholder="Next to McDonalds, in front of tram station.."
+              value={state.description}
+              onChange={(e) =>
+                setState({...state, description: e.target.value})
+              }
+            />
+            <AddButton add={addMeetingPoint} />
+          </>
+        )}
+        {meetingPoint && (
+          <ShowMeetingPoint
+            data={{meetingPoint, setMeetingPoint}}
+            data_manage={setState}
+          />
+        )}
+      </label>
+    </>
   )
 }
 
@@ -230,7 +213,7 @@ const AtWhatTimeDoYouMeet = () => {
         type="text"
         name="meeting_time"
         placeholder="00:00"
-        // required
+        required
         onFocus={(e) => {
           e.target.type = 'time'
         }}
@@ -247,7 +230,7 @@ const DescribeYourEvent = () => {
         type="text"
         name="description"
         placeholder="we are going to.."
-        // required
+        required
       />
     </label>
   )
@@ -261,7 +244,7 @@ const GiveAnImageToYourEvent = () => {
         type="file"
         accept="image/png, image/jpeg"
         name="img_file"
-        // required
+        required
       />
     </label>
   )
@@ -565,22 +548,12 @@ const LoadingPage = () => {
 }
 
 function CreateEventPage() {
-  const optionStyle = 'bg-slate-800 rounded-md overflow-hidden'
-
+  const [meetingPoint, setMeetingPoint] = useState()
+  const [eventAddress, setEventAddress] = useState()
   const [steps, setSteps] = useState([])
   const [includes, setIncludes] = useState([])
   const [brings, setBrings] = useState([])
   const [type, setType] = useState('night out')
-  // const [tags, setTags] = useState({
-  //   nightout: false,
-  //   trip: false,
-  //   citytour: false,
-  //   foodtour: false,
-  //   hike: false,
-  //   party: false,
-  //   boatparty: false,
-  //   houseparty: false,
-  // })
   const [eventSent, setEventSent] = useState(false)
   const [form, setForm] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -594,26 +567,18 @@ function CreateEventPage() {
     const data = new FormData(form)
     const datajson = Object.fromEntries(data.entries())
     const {
-      // bring_with,
       city,
-      // created_by,
       date,
       description,
-      // included,
       name,
-      // tags,
       timestamp,
       img_file,
-      meeting_point,
       meeting_time,
-      location,
       price,
-      // type,
     } = datajson
 
-    console.log(datajson)
-    console.log(steps)
     const uuid = uuidv4()
+    const price_decimal = price * 100
 
     const send = await supabase.from('events').insert({
       id: uuid,
@@ -627,8 +592,8 @@ function CreateEventPage() {
       included: [includes],
       bring_with: [brings],
       img_url: `events/${uuid}.jpg`,
-      location: location,
-      meeting_point: meeting_point,
+      location: eventAddress,
+      meeting_point: meetingPoint,
       meeting_time: meeting_time,
       price: price,
     })
@@ -643,7 +608,8 @@ function CreateEventPage() {
     if (send.error) {
       console.log(
         'there has been an error on submitting the event : ',
-        send.error.message
+        send.error.message,
+        send.error
       )
       return
     }
@@ -654,6 +620,18 @@ function CreateEventPage() {
       )
       return
     }
+
+    const CREATE_EVENT_ON_STRIPE = await stripeNode.products.create({
+      id: uuid,
+      name: name,
+      default_price_data: {
+        currency: 'eur',
+        unit_amount_decimal: price_decimal,
+      },
+    })
+
+    console.log('send data : ', send)
+    console.log(CREATE_EVENT_ON_STRIPE)
     setLoading(false)
     setEventSent(true)
   }
@@ -685,10 +663,11 @@ function CreateEventPage() {
 
     console.log({
       ...datajson,
-      type: type,
-      brings: brings,
-      includes: includes,
-      steps: steps,
+      type,
+      brings,
+      includes,
+      steps,
+      location,
     })
   }
 
@@ -697,21 +676,17 @@ function CreateEventPage() {
       {form && (
         <div className="page md:w-fit text-white">
           <p className="title">Create an Event</p>
-          <div className="block">
-            {/* <form onSubmit={handleSubmit}> */}
+          <div className="create-event-block">
             <form onSubmit={handleSubmit}>
-              {/*
-              <label>
-                Select a type :
-                 <Tags state={{tags, setTags}} typeState={{type, setType}} /> 
-              </label>
-                 */}
+              {/* <form onSubmit={handleShowData}> */}
               <CreateEventCitySelect />
               <NameYourEvent />
-              <LocationOfTheEvent />
+              <LocationOfTheEvent
+                value_data={{eventAddress, setEventAddress}}
+              />
               <WhenIsYourEvent />
               <WhatTimeIsYourEvent />
-              <WhereDoYouMeet />
+              <WhereDoYouMeet value_data={{meetingPoint, setMeetingPoint}} />
               <AtWhatTimeDoYouMeet />
               <EventTypeToggleGroup type_data={{type, setType}} />
               <DescribeYourEvent />

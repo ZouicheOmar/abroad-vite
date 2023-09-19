@@ -8,11 +8,15 @@ import EventPage from './pages/EventPage'
 import CreateEventPage from './pages/CreateEventPage'
 import AuthPage from './pages/AuthPage'
 import PaywallPage from './pages/PaywallPage'
+import {Elements} from '@stripe/react-stripe-js'
 import Footer from './components/Footer'
 import ConfirmEmailPage from './pages/ConfirmEmail'
+import PurshaseSuccess from './pages/PurchaseSuccessPage'
 // import {EventsContextProvider} from './functions/store'
 import {EventsContextProvider} from './context/eventStore'
 import {UserContextProvider} from './context/userStore'
+
+import {stripePromise} from './utils/stripe'
 
 function App() {
   return (
@@ -39,9 +43,14 @@ function App() {
                 <Route
                   exact
                   path="/logpage/:identifier"
-                  element={<ProfilePage />}
+                  element={
+                    <Elements stripe={stripePromise}>
+                      <ProfilePage />
+                    </Elements>
+                  }
                 />
               </Route>
+              <Route exact path="/success" element={<PurshaseSuccess />} />
               <Route exact path="/paywallTest" element={<PaywallPage />} />
             </Routes>
 

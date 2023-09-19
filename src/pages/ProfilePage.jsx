@@ -16,7 +16,7 @@ dayjs.extend(relativeTime)
 import {Title} from '../components/UIComponents'
 import {Separator} from '../@/components/ui/separator'
 import {SmallBrowseEventsButton} from '../components/BrowserEventsButton'
-import {SmallEventCard} from '../components/Cards'
+import {SmallEventCard, SmallEventCardQRCodeAccess} from '../components/Cards'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '../@/components/ui/tabs'
 import {Input} from '../@/components/ui/input'
 import {Button} from '../@/components/ui/button'
@@ -25,7 +25,7 @@ const TabsWindows = () => {
   const {user} = useUser()
 
   return (
-    <TabsList className="w-full p-0 m-0">
+    <TabsList className="w-[100vw] p-0 m-0">
       <TabsTrigger
         value="events"
         className="w-full  data-[state=inactive]:text-slate-700 data-[state=active]:scale-[120%]"
@@ -54,13 +54,18 @@ const EventsTab = () => {
   const {userEvents} = useUser()
 
   return (
-    <TabsContent value="events" className="flex justify-center">
+    <TabsContent value="events" className="w-full p-0 flex justify-center">
       <div className=" flex flex-col gap-2 items-center w-[90%] border-[1px] border-slate-700 rounded p-2 px-4 text-white ">
         <div className="w-full mb-2"></div>
         {userEvents?.length > 0 &&
           userEvents.map((item, index) => (
-            <SmallEventCard event={item} key={index} />
+            <SmallEventCardQRCodeAccess event={item} key={index} />
           ))}
+        {userEvents?.length === 0 && (
+          <p className="smallDesc border-[1px] border-orange-500 rounded bg-orange-900 bg-opacity-50 text-orange-500 px-2">
+            You joined none of the events, check the upcoming ones !
+          </p>
+        )}
         <SmallBrowseEventsButton />
       </div>
     </TabsContent>
@@ -279,7 +284,11 @@ const PageTabs = () => {
   const {user} = useUser()
 
   return (
-    <Tabs defaultValue="events" className="max-w-full p-0 mx-2 rounded ">
+    <Tabs
+      defaultValue="events"
+      className="w-[100vw] p-0 ml-auto mr-auto rounded "
+      id="tabs"
+    >
       <TabsWindows />
       <EventsTab />
       <AccountTab />
@@ -293,7 +302,7 @@ function ProfilePage() {
 
   return (
     <>
-      <div className="w-full mt-[3rem] flex flex-col justify-center">
+      <div className="w-[100vw] mt-[3rem] flex flex-col justify-center">
         {user && (
           <>
             <Title

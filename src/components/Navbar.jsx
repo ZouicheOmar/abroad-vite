@@ -48,6 +48,10 @@ const MobileNavbarMenuItem = ({item}) => {
 }
 
 const NavbarMenu = () => {
+  const user = useUser()
+  useEffect(() => {
+    console.log('from navbar', user)
+  }, [])
   const menu_content_style =
     'modal p-2 rounded-lg w-[100vw] h-[100vh] data-[state=open]:animate-[opacity-animation-on_300ms] data-[state=closed]:animate-[opacity-animation-off_300ms]'
 
@@ -61,8 +65,7 @@ const NavbarMenu = () => {
       <DropdownMenu.Content className={menu_content_style}>
         <MobileNavbarMenuItem item="home" />
         <MobileNavbarMenuItem item="events" />
-        <MobileNavbarMenuItem item="your account" />
-        {/* <MobileNavbarMenuItem item="paywall test" /> */}
+        {user.user === null && <MobileNavbarMenuItem item="your account" />}
         <MobileNavbarMenuItem item="create an event" />
       </DropdownMenu.Content>
     </DropdownMenu.Root>

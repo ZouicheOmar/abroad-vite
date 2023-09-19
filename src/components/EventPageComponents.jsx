@@ -7,6 +7,8 @@ import {useLocation, useNavigate} from 'react-router-dom'
 import {supabase, useEvent} from '../functions/functions'
 import {useUser} from '../context/userStore'
 
+import {makeFirstLetterUpperCase} from '../functions/textFormattingFunctions'
+
 import {Title} from '../components/UIComponents'
 
 dayjs.extend(relativeTime)
@@ -22,7 +24,7 @@ export const EventBanner = ({src}) => {
 export const Tag = ({tag}) => {
   return (
     <button className=" mr-1 px-2 rounded-md bg-black border-[0.5px] border-stone-900">
-      {tag}
+      {makeFirstLetterUpperCase(tag)}
     </button>
   )
 }
@@ -38,13 +40,6 @@ export const HeaderBody = ({data}) => {
         </p>
         <p>{dayjs(date).fromNow()}</p>
       </div>
-      {/* <div className="">
-                <button
-                    className="text-green-500 border-[0.5px] rounded-md border-stone-700 px-2 hover:font-bold"
-                >
-                    Join
-                </button>
-            </div> */}
     </div>
   )
 }
@@ -73,20 +68,22 @@ export const Description = ({data}) => {
   return (
     <Section>
       <p className="text-xl">What are we doing ?</p>
-      <p className="text-sm text-justify text-slate-300">{description}</p>
+      <p className=" text-justify text-slate-300">{description}</p>
     </Section>
   )
 }
 
-export const EventLocation = () => {
+export const EventLocation = ({data}) => {
   return (
     <Section>
       <p className="text-xl">Where ?</p>
       <p className=" leading-snug">
-        Montpellier Saint-Roch Train Station <br />
-        <span className="text-slate-300 text-sm">Pl. Auguste Gibert</span>
+        {data.location.place_name} <br />
+        <span className="text-slate-300 ">{data.location.address}</span>
         <br />
-        <span className="text-slate-300 text-sm">34000 Montpellier</span>
+        <span className="text-slate-300 ">
+          {data.location.zipcode}, {data.location.city}
+        </span>
       </p>
     </Section>
   )
@@ -100,7 +97,7 @@ export const Step = ({data}) => {
       <time dateTime="21:00" className="text-white">
         {time}
       </time>
-      <p className="text-sm leading-snug text-slate-300 ">
+      <p className=" leading-snug text-slate-300 ">
         {action}
         <br />
         {location}
@@ -144,13 +141,29 @@ export const Included = ({data}) => {
       {data != undefined && (
         <Section>
           <p className="text-xl">What's included ?</p>
-          <ul className="text-sm text-slate-300 list-disc list-inside">
+          <ul className=" text-slate-300 list-disc list-inside">
             {data.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
         </Section>
       )}
+    </>
+  )
+}
+
+export const Brings = ({data}) => {
+  useEffect(() => console.log(data), [])
+  return (
+    <>
+      <Section>
+        <p className="text-xl">What you need to bring with you</p>
+        <ul className=" text-slate-300 list-disc list-inside">
+          {data.bring_with.map((item, index) => {
+            return <li key={index}>item</li>
+          })}
+        </ul>
+      </Section>
     </>
   )
 }
@@ -214,5 +227,25 @@ export const AlreadyIn = () => {
     <div className="border-[1px] rounded border-green-400 px-4 py-2 bg-green-900">
       <p className="font-bold ">You Are IN !</p>
     </div>
+  )
+}
+
+export const NavigateToLogInButton = () => {
+  const navigate = useNavigate()
+
+  return (
+    <button
+      className="border-[1px] rounded border-white p-2 text-lg hover:cursor-pointer"
+      onClick={() => {
+        navigate('/logpage')
+        window.scroll({
+          top: 0,
+          left: 0,
+          behavior: 'smooth',
+        })
+      }}
+    >
+      Log In to join
+    </button>
   )
 }

@@ -1,12 +1,15 @@
 /** @format */
 import {useLocation} from 'react-router-dom'
 import {useEvent} from '../functions/functions'
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
+import {Elements} from '@stripe/react-stripe-js'
 
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 dayjs.extend(relativeTime)
+
+import {makeFirstLetterUpperCase} from '../functions/textFormattingFunctions'
 
 import CardPaymentComponent from '../components/PaymentForm'
 import {Button} from '../@/components/ui/button'
@@ -20,6 +23,7 @@ import {Input} from '../@/components/ui/input'
 import {Label} from '../@/components/ui/label'
 
 import {PersonStanding} from 'lucide-react'
+import {useUser} from '../context/userStore'
 
 const PaymentPageSmallCard = ({data, img}) => {
   return (
@@ -31,16 +35,18 @@ const PaymentPageSmallCard = ({data, img}) => {
         />
         <div className="inline w-3/4 px-2 flex flex-col justify-between">
           <p className="text-white text-xl smallTitleBold ">
-            {data.name} | {data.city}
+            {makeFirstLetterUpperCase(data.name)} |{' '}
+            {makeFirstLetterUpperCase(data.city)}
           </p>
           <div className="leading-tight">
             <p className="text-slate-200 smallDesc">
-              {dayjs(data.date).format('dddd MMM D')},
-              {dayjs(`${data.date}${data.time}`).format('HH:mm')}
+              {dayjs(`${data.date}${data.time}`).format('dddd MMM D, h:mm A')}
             </p>
-            <p className="text-slate-200 smallDesc">
-              {data.location ? data.location : 'Meeting point'}
-            </p>
+            {data.location && (
+              <p className="text-slate-200 smallDesc">
+                {data.location.place_name}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -49,6 +55,16 @@ const PaymentPageSmallCard = ({data, img}) => {
 }
 
 const PaymentPagePaymentFlow = ({data}) => {
+  const hour = data.meeting_time.slice(0, 2)
+  const minute = data.meeting_time.slice(3, 5)
+  const meeting_time_display = dayjs(data.date)
+    .hour(hour)
+    .minute(minute)
+    .format('h:mm A')
+
+  useEffect(() => {
+    console.log('paymentpageflow event id', data)
+  }, [])
   return (
     <>
       <Accordion
@@ -61,12 +77,13 @@ const PaymentPagePaymentFlow = ({data}) => {
             <PersonStanding />
           </span>
           <div className="leading-none">
-            {/* <span className="h-full self-center  smallDesc text-white text-lg">
-              By Day : Meet at Gare Saint-Roch at 9:00 PM
-            </span> */}
             <span className="h-full self-center  smallDesc text-white text-lg">
-              {data.meeting_point ? data.meeting_point : 'meeting point'}, at{' '}
-              {data.meeting_time ? data.meeting_time : '9:00PM'}
+              {data.meeting_point
+                ? data.meeting_point.place_name +
+                  ', ' +
+                  data.meeting_point.address
+                : 'meeting point'}
+              , at {data.meeting_time ? meeting_time_display : '9:00PM'}
             </span>
             <br />
             <span className="h-full self-center  smallDesc text-slate-300">
@@ -76,7 +93,7 @@ const PaymentPagePaymentFlow = ({data}) => {
         </div>
         <div className="w-[99%] text-white text-lg font-bold mr-auto ml-auto ring-1 rounded flex justify-between p-2 mt-2">
           <span>TOTAL : </span>
-          <span>{data.price ? data.price : '0€'}</span>
+          <span>{data.price ? data.price : '0'} €</span>
         </div>
         <AccordionItem value="item-1" className="border-none ">
           <AccordionTrigger chevron="false">
@@ -87,41 +104,10 @@ const PaymentPagePaymentFlow = ({data}) => {
               Payment
             </Button>
           </AccordionTrigger>
-          <AccordionContent>
-            <div className="flex gap-2 ">
-              <div className="w-full">
-                <Label htmlFor="first_name">First Name</Label>
-                <Input
-                  name="first_name"
-                  type="text"
-                  placeholder="John"
-                  required
-                  className="rounded text-slate-400"
-                />
-              </div>
-              <div className="w-full">
-                <Label htmlFor="last_name">Last Name</Label>
-                <Input
-                  name="last_name"
-                  type="text"
-                  placeholder="DOE"
-                  required
-                  className="rounded text-slate-400"
-                />
-              </div>
-            </div>
-            <Label htmlFor="email">Your email</Label>
-            <Input
-              name="email"
-              type="email"
-              placeholder="johnDoe@gmail.com"
-              required
-              className="rounded text-slate-400 mb-[0.35rem]"
-            />
-
-            <span className="">Card info</span>
-            <CardPaymentComponent />
-          </AccordionContent>
+          <PaymentPagePaymentFlowCardInfo
+            amount={data.price}
+            event_id={data.id}
+          />
         </AccordionItem>
       </Accordion>
 
@@ -132,6 +118,81 @@ const PaymentPagePaymentFlow = ({data}) => {
         </p>
       </div>
     </>
+  )
+}
+
+const PaymentPagePaymentFlowCardInfo = ({amount, event_id}) => {
+  //Add phone number
+
+  const {user} = useUser()
+  const INIT_STATE = {
+    first_name: user.first_name,
+    last_name: user.last_name,
+    email: user.email,
+    phone: user.phone,
+  }
+  const [state, setState] = useState(INIT_STATE)
+
+  return (
+    <AccordionContent>
+      <div className="flex gap-2 ">
+        <div className="w-full">
+          <Label htmlFor="first_name">First Name</Label>
+          <Input
+            name="first_name"
+            type="text"
+            placeholder="John"
+            value={state.first_name}
+            onChange={(e) => setState({...state, first_name: e.target.value})}
+            required
+            className="rounded placeholder:text-slate-400"
+          />
+        </div>
+        <div className="w-full">
+          <Label htmlFor="last_name">Last Name</Label>
+          <Input
+            name="last_name"
+            type="text"
+            placeholder="DOE"
+            value={state.last_name}
+            onChange={(e) => setState({...state, last_name: e.target.value})}
+            required
+            className="rounded placeholder:text-slate-400"
+          />
+        </div>
+      </div>
+      <Label htmlFor="email">Your email</Label>
+      <Input
+        name="email"
+        type="email"
+        placeholder="johnDoe@gmail.com"
+        value={state.email}
+        onChange={(e) => setState({...state, email: e.target.value})}
+        required
+        className="rounded placeholder:text-slate-400 mb-[0.35rem]"
+      />
+      <Input
+        name="phone"
+        type="tel"
+        placeholder="+33 777 92 92 92"
+        value={state.phone}
+        onChange={(e) => setState({...state, phone: e.target.value})}
+        required
+        className="rounded placeholder:text-slate-400 mb-[0.35rem]"
+      />
+
+      <span className="">Card info</span>
+      <CardPaymentComponent
+        data={{
+          amount: amount,
+          first_name: state.first_name,
+          last_name: state.last_name,
+          email: state.email,
+          phone: state.phone,
+          event_id: event_id,
+        }}
+      />
+    </AccordionContent>
   )
 }
 

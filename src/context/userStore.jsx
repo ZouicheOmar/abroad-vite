@@ -64,14 +64,12 @@ const useUserSource = () => {
       console.log('error fetching user managed events : ', error)
       return
     }
-    console.log('user managed events data : ', data)
     setUserManagedEvents(data)
   }
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
       if (event == 'SIGNED_IN') {
-        console.log(session.user)
         setSession(session)
         fetchUser(session.user.id)
         getUserEvents(session.user.id)

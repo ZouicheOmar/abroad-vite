@@ -14,9 +14,11 @@ import {
   Participants,
   Header,
   Included,
+  Brings,
   Plan,
   Join,
   AlreadyIn,
+  NavigateToLogInButton,
 } from '../components/EventPageComponents'
 
 dayjs.extend(relativeTime)
@@ -200,7 +202,7 @@ function EventPage() {
   const {user} = useUser()
   const [joined, setJoined] = useState(false)
 
-  const [listOfParticipants, setListOfParticipants] = useState(null)
+  const [listOfParticipants, setListOfParticipants] = useState([])
   const location = useLocation()
   const event_id = location.pathname.slice(8)
   const {data, loading, error, img} = useEvent(event_id)
@@ -221,6 +223,7 @@ function EventPage() {
     if (usersFromDb.error) {
       console.log(error)
     }
+    console.log('usersFromDB', usersFromDb.data.length)
     setListOfParticipants(usersFromDb.data)
   })
 
@@ -252,18 +255,27 @@ function EventPage() {
           <EventBanner src={img} />
           <Title title={data.name} />
           <Header data={data} />
-          <EventLocation />
+          <EventLocation data={data} />
           <Description data={data} />
           <Plan data={data} />
           <Included data={data.included[0]} />
+          {data.bring_with && <Brings data={data} />}
 
-          {joined ? (
+          {/* {joined ? (
             <AlreadyIn />
           ) : (
             <Join event_id={event_id} setJoined={setJoined} />
+          )} */}
+          {user ? (
+            joined ? (
+              <AlreadyIn />
+            ) : (
+              <Join event_id={event_id} setJoined={setJoined} />
+            )
+          ) : (
+            <NavigateToLogInButton />
           )}
-
-          {listOfParticipants !== null && (
+          {listOfParticipants.length !== 0 && (
             <Participants list={listOfParticipants} />
           )}
         </>

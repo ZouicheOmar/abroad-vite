@@ -6,7 +6,9 @@ import App from './App.jsx'
 import './global.scss'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <HashRouter>
+  // <HashRouter>
+  <BrowserRouter>
     <App />
-  </HashRouter>
+  </BrowserRouter>
+  // </HashRouter>
 )
