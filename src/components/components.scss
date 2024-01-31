@@ -3,6 +3,8 @@ $DM: 'DM Serif Text';
 $jost: 'Jost', sans-serif;
 $grotesk: 'Space Grotesk', sans-serif;
 $chivo: 'Chivo', sans-serif;
+$inclusive: 'Inclusive Sans', sans-serif;
+$formadjr: 'Forma DJR Display', sans-serif;
 
 $rounded: 0.5rem;
 $blur: 24px;
@@ -29,8 +31,9 @@ $bg-layer-3: rgba(57, 57, 75, 0.7);
 $shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 $backdrop: blur(24px);
 * {
-  font-family: $grotesk;
-  // font-family: $chivo;
+  // font-family: $grotesk;
+  font-family: $chivo;
+  // font-family: $formadjr;
 }
 *:hover {
   cursor: default;
@@ -38,6 +41,20 @@ $backdrop: blur(24px);
 svg:hover {
   cursor: pointer;
 }
+
+*.formadjr {
+  font-family: $formadjr;
+}
+*.chivo {
+  font-family: $chivo;
+}
+*.grotesk {
+  font-family: $grotesk;
+}
+*.inclusive {
+  font-family: $inclusive;
+}
+
 @mixin flex-col-center($gap: 1rem) {
   display: flex;
   flex-direction: column;
@@ -72,10 +89,38 @@ svg:hover {
   width: 100vw;
   backdrop-filter: blur(24px);
   filter: brightness(1.3);
-  span {
+  @media (min-width: $md) {
+    // width: 90vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
+  @media (min-width: $lg) {
+    // width: 75vw;
+    padding-left: 12.5vw;
+    padding-right: 12.5vw;
+  }
+  span.navbar-item {
     cursor: pointer;
-    font-size: xx-large;
+    font-family: $formadjr;
+    color: #cbd5e1;
+    font-weight: 500;
+    padding-right: 1rem;
+    font-size: medium;
+    padding-left: 1rem;
+    transition: all 200ms;
+    border-radius: 3px;
+    &:hover {
+      color: white;
+      background-color: #232332;
+    }
+    @media (min-width: $md) {
+      font-size: large;
+    }
+  }
+  .navbar-title {
+    cursor: pointer;
     font-family: $DM;
+    font-size: xx-large;
     color: white;
   }
   li:hover {
@@ -87,6 +132,9 @@ svg:hover {
     // font-size: xx-large;
     font-family: $DM;
     color: white;
+  }
+  .desktop {
+    text-decoration: none;
   }
 }
 .page {
@@ -227,6 +275,11 @@ svg:hover {
     flex-wrap: nowrap;
     gap: 0.5rem;
     overflow-y: hidden;
+    @media (min-width: $sm) {
+      max-width: 0;
+      max-height: 0;
+      overflow: hidden;
+    }
   }
 }
 .card {
@@ -249,6 +302,7 @@ svg:hover {
   }
   .card-describe {
     z-index: 10;
+    color: white;
     backdrop-filter: blur($blur);
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: $rounded;
@@ -256,7 +310,6 @@ svg:hover {
     transition: all 100ms ease-out;
     &:hover {
       backdrop-filter: blur($blur);
-      color: green;
       transform: scale(1.05);
       cursor: default;
     }
@@ -1141,7 +1194,20 @@ a {
   }
 }
 
+.formaDJR {
+  font-family: $formadjr;
+}
+
 .abroad-logo {
   font-family: $DM;
   font-size: x-large;
+}
+
+.inclusive {
+  font-family: 'Inclusive Sans', sans-serif;
+}
+
+.inclusive-bold {
+  font-family: 'Inclusive Sans', sans-serif;
+  font-weight: 600;
 }

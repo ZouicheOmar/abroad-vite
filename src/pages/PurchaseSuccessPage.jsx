@@ -27,7 +27,7 @@ const QRCodeTest = ({value}) => {
   )
 }
 
-const EventTicket = ({data, event_data}) => {
+export const EventTicket = ({data, event_data}) => {
   useEffect(() => {
     console.log('purchaser data : ', data)
     console.log('event data : ', event_data)

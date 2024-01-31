@@ -5,6 +5,8 @@ import './components.scss'
 import {supabase} from '../functions/functions'
 import {useUser} from '../context/userStore'
 
+import {UserIcon, MenuIcon} from './Icons'
+
 import {makeFirstLetterUpperCase} from '../functions/textFormattingFunctions'
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
@@ -23,25 +25,30 @@ const defineRoutes = (route) => {
       return '/paywallTest'
     case 'create an event':
       return '/createevent'
+    case 'about':
+      return '/about'
   }
 }
 
 const MobileNavbarMenuItem = ({item}) => {
   const navigate = useNavigate()
 
-  const handleClick = () => {
+  const handleClick = (e) => {
     const NAVIGATE_TO = defineRoutes(item)
     console.log(NAVIGATE_TO)
     navigate(NAVIGATE_TO)
   }
 
+  // const item_style =
+  //   'formadjr border-[1px] rounded-[0.35rem] border-neutral-700 hover:border-neutral-400 my-1 py-1 text-2xl text-center hover:cursor-pointer'
+
   const item_style =
-    'border-[1px] rounded-[0.35rem] border-neutral-700 hover:border-neutral-400 my-1 py-1 text-2xl text-center hover:cursor-pointer'
+    'formadjr font-bold border-2 border-white py-1 text-2xl pl-[1rem] hover:cursor-pointer text-white'
 
   const TO_DISPLAY = makeFirstLetterUpperCase(item)
 
   return (
-    <DropdownMenu.Item className={item_style} onClick={handleClick}>
+    <DropdownMenu.Item className={item_style} onClick={(e) => handleClick(e)}>
       {TO_DISPLAY}
     </DropdownMenu.Item>
   )
@@ -57,16 +64,14 @@ const NavbarMenu = () => {
 
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Button className="w-fit px-[2px]">
-          <Menu />
-        </Button>
+      <DropdownMenu.Trigger className="sm:hidden focus:outline-none">
+        <MenuIcon className="px-[2px] active:border-none" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content className={menu_content_style}>
         <MobileNavbarMenuItem item="home" />
         <MobileNavbarMenuItem item="events" />
         {user.user === null && <MobileNavbarMenuItem item="your account" />}
-        <MobileNavbarMenuItem item="create an event" />
+        <MobileNavbarMenuItem item="about" />
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   )
@@ -99,13 +104,19 @@ const UserInNavbar = () => {
 
   return (
     <>
-      <p
+      {/* <p
         className="text-sm leading-none hover:cursor-pointer border-[1px] rounded p-1 w-fit h-fit truncate "
         onClick={handleGoToUserPage}
       >
         {user.first_name} <br />
         {user.last_name}
-      </p>
+      </p> */}
+      <span
+        className="text-sm leading-none hover:cursor-pointer border-2 rounded-full hover:curtsor-pointer p-1 w-fit h-fit truncate "
+        onClick={handleGoToUserPage}
+      >
+        <UserIcon className="hover:cursor-pointer" />
+      </span>
       <p
         className="text-sm min-h-full border-[1px] rounded px-2 hover:bg-slate-900 cursor-pointer"
         onClick={handleLogout}
@@ -131,9 +142,38 @@ const HomeButton = () => {
   )
 }
 
+const DesktopNavbarItems = () => {
+  const navigate = useNavigate()
+  const handleClick = (e, route) => {
+    e.stopPropagation()
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    })
+    navigate(route)
+  }
+
+  return (
+    <div className="desktop hidden sm:flex text-xl sm:gap-0 md:gap-4 ">
+      <span className="navbar-item" onClick={(e) => handleClick(e, '/events')}>
+        Events
+      </span>
+      <span className="navbar-item" onClick={(e) => handleClick(e, '/logpage')}>
+        Your Profile
+      </span>
+      <span className="navbar-item" onClick={(e) => handleClick(e, '/about')}>
+        About
+      </span>
+      <span className="navbar-item" onClick={() => handleClick('/')}>
+        Contact Us
+      </span>
+    </div>
+  )
+}
+
 function Navbar() {
   const {user} = useUser()
-  const navigate = useNavigate()
 
   return (
     <>
@@ -142,6 +182,7 @@ function Navbar() {
         <div className="z-50 flex gap-2 items-center">
           {user && <UserInNavbar />}
           <NavbarMenu />
+          <DesktopNavbarItems />
         </div>
       </div>
     </>

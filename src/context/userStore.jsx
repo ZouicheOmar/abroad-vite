@@ -9,6 +9,7 @@ const useUserSource = () => {
   const [session, setSession] = useState(null)
   const [user, setUser] = useState(null)
   const [userEvents, setUserEvents] = useState(null)
+  const [userEventsFromCross, setUserEventsFromCross] = useState(null)
   const [userManagedEvents, setUserManagedEvents] = useState(null)
 
   const fetchUser = async (id) => {
@@ -30,13 +31,16 @@ const useUserSource = () => {
 
     const {data, error} = await supabase
       .from('events_cross_users')
-      .select('event_id')
+      // .select('event_id')
+      .select()
       .eq('user_id', id)
 
     if (error) {
       console.log('error fetching events', error.message)
       return
     }
+
+    setUserEventsFromCross(data)
 
     data.forEach((item) => {
       SET_EVENTS_STATE.push(item.event_id)
@@ -84,7 +88,7 @@ const useUserSource = () => {
     })
   }, [])
 
-  return {user, userEvents, userManagedEvents}
+  return {user, userEvents, userEventsFromCross, userManagedEvents}
 }
 
 export const useUser = () => {

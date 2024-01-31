@@ -11,7 +11,10 @@ export const BrowseEventsButton = () => {
     navigate('./events')
   })
   return (
-    <p className="nicebutton w-full py-4" onClick={handleClick}>
+    <p
+      className="nicebutton w-full py-4 sm:w-[16rem] sm:text-lg sm:py-2"
+      onClick={handleClick}
+    >
       Browse all events
     </p>
   )

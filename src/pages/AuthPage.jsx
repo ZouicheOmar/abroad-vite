@@ -71,11 +71,11 @@ const SignupCard = () => {
   }
 
   return (
-    <AccordionItem value="item-1" className=" min-w-70%">
+    <AccordionItem value="item-1" className="min-w-70%">
       <AccordionTrigger>New Account</AccordionTrigger>
       <AccordionContent>
-        <div className="grid w-full max-w-sm items-center gap-1.5 mb-10">
-          <form onSubmit={handleSubmit}>
+        <div className="min-w-full max-w-sm gap-1.5 mb-10">
+          <form onSubmit={handleSubmit} className="flex flex-col w-full ">
             <p className="mb-1">Name for the team to id you</p>
             <div className="flex gap-2 mb-4 ">
               <Input
@@ -93,24 +93,31 @@ const SignupCard = () => {
                 className="rounded text-slate-400"
               />
             </div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              name="email"
-              type="email"
-              id="email"
-              placeholder="dupont@hotmail.com"
-              required
-              className="rounded text-slate-400"
-            />
-            <Label htmlFor="password">Password</Label>
-            <Input
-              name="password"
-              type="password"
-              id="password"
-              placeholder="********"
-              required
-              className="rounded text-slate-400"
-            />
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  name="email"
+                  type="email"
+                  id="email"
+                  placeholder="dupont@hotmail.com"
+                  required
+                  className="rounded text-slate-400"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  name="password"
+                  type="password"
+                  id="password"
+                  placeholder="********"
+                  required
+                  className="rounded text-slate-400"
+                />
+              </div>
+            </div>
+
             <div className="flex flex-col justify-items-center">
               <Button
                 type="submit"
@@ -162,26 +169,32 @@ const LoginCard = () => {
       <AccordionContent>
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <form onSubmit={handleSubmit}>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              name="email"
-              type="email"
-              id="email"
-              placeholder="dupont@hotmail.com"
-              className="rounded placeholder:text-slate-400 text-white"
-              onChange={(e) => {
-                e.target.value !== loginMessage && setLoginMessage(null)
-              }}
-            />
-            <Label htmlFor="password">Password</Label>
-            <Input
-              name="password"
-              type="password"
-              id="password"
-              placeholder="********"
-              className="rounded placeholder:text-slate-400 text-white"
-              onChange={() => loginMessage && setLoginMessage(null)}
-            />
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  name="email"
+                  type="email"
+                  id="email"
+                  placeholder="dupont@hotmail.com"
+                  className="rounded placeholder:text-slate-400 text-white"
+                  onChange={(e) => {
+                    e.target.value !== loginMessage && setLoginMessage(null)
+                  }}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  name="password"
+                  type="password"
+                  id="password"
+                  placeholder="********"
+                  className="rounded placeholder:text-slate-400 text-white"
+                  onChange={() => loginMessage && setLoginMessage(null)}
+                />
+              </div>
+            </div>
             {loginMessage && (
               <p className=" p-2 rounded mt-2 border-red-600 bg-red-900 bg-opacity-50 text-red-500 text-xs">
                 {loginMessage}
@@ -208,7 +221,11 @@ const LoginCard = () => {
 
 const AuthAccordion = () => {
   return (
-    <Accordion type="single" collapsible className="w-[90%]">
+    <Accordion
+      type="single"
+      collapsible
+      className="w-[90%] md:max-w-[75%] lg:w-[50%]"
+    >
       <SignupCard />
       <LoginCard />
     </Accordion>
@@ -216,10 +233,16 @@ const AuthAccordion = () => {
 }
 
 const Container = ({children}) => (
-  <div className="page pt-[10%] ">{children}</div>
+  <div className="w-[95vw] mt-[3rem] min-h-[100vh] lg:mt-[5rem] flex flex-col gap-6 items-center pt-[10%] lg:pt-0 lg:w-1/2 ">
+    {children}
+  </div>
 )
 
-const Title = () => <p className="title">Create or Log In to your Account</p>
+const Title = () => (
+  <p className="formaDJR md:text-3xl text-2xl">
+    Create or Log In to your Account
+  </p>
+)
 
 const Log = () => {
   // user always signs up, if account already created, automatically
@@ -326,8 +349,10 @@ function AuthPage() {
     <>
       <Container>
         <Title />
-        <Description />
-        <AuthAccordion />
+        <div className="w-full  flex flex-col gap-6 justify-center items-center ">
+          <Description />
+          <AuthAccordion />
+        </div>
       </Container>
     </>
   )

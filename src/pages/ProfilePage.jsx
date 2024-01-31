@@ -17,6 +17,7 @@ import {Title} from '../components/UIComponents'
 import {Separator} from '../@/components/ui/separator'
 import {SmallBrowseEventsButton} from '../components/BrowserEventsButton'
 import {SmallEventCard, SmallEventCardQRCodeAccess} from '../components/Cards'
+import {CollapsibleSmallCards} from '../components/Cards'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '../@/components/ui/tabs'
 import {Input} from '../@/components/ui/input'
 import {Button} from '../@/components/ui/button'
@@ -57,15 +58,16 @@ const EventsTab = () => {
     <TabsContent value="events" className="w-full p-0 flex justify-center">
       <div className=" flex flex-col gap-2 items-center w-[90%] border-[1px] border-slate-700 rounded p-2 px-4 text-white ">
         <div className="w-full mb-2"></div>
-        {userEvents?.length > 0 &&
+        {/* {userEvents?.length > 0 &&
           userEvents.map((item, index) => (
             <SmallEventCardQRCodeAccess event={item} key={index} />
-          ))}
+          ))} */}
         {userEvents?.length === 0 && (
           <p className="smallDesc border-[1px] border-orange-500 rounded bg-orange-900 bg-opacity-50 text-orange-500 px-2">
             You joined none of the events, check the upcoming ones !
           </p>
         )}
+        <CollapsibleSmallCards />
         <SmallBrowseEventsButton />
       </div>
     </TabsContent>
@@ -302,7 +304,7 @@ function ProfilePage() {
 
   return (
     <>
-      <div className="w-[100vw] mt-[3rem] flex flex-col justify-center">
+      <div className="w-[100vw] mt-[3rem] flex flex-col justify-center bg-red-500">
         {user && (
           <>
             <Title

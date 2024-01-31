@@ -94,12 +94,29 @@ function PayementForm({data}) {
     }
 
     if (paymentResult.paymentIntent.status === 'succeeded') {
-      console.log(
-        'paymentResult status : ',
-        paymentResult.paymentIntent.status,
-        paymentResult.paymentIntent
-      )
-      console.log('payment done ')
+      console.log('what is supposed to be inserted to the table : ', data)
+
+      //if I add this to the table, the purchaser's id most match the user's ID
+      const ADD_EVENTS_CROSS_USERS = await supabase
+        .from('events_cross_users')
+        .insert({
+          event_id: event_id,
+          user_id: user.user.id,
+          participant_first_name: first_name,
+          participant_last_name: last_name,
+          participant_email: email,
+          participant_phone: phone,
+        })
+
+      console.log('ADD_EVENTS_CROSS_USERS : ', ADD_EVENTS_CROSS_USERS)
+
+      if (ADD_EVENTS_CROSS_USERS.error) {
+        console.log(
+          'error adding user to the event :',
+          ADD_EVENTS_CROSS_USERS.error
+        )
+      }
+
       navigate('/success', {
         state: {
           event_id: event_id,
@@ -109,25 +126,12 @@ function PayementForm({data}) {
           email: email,
         },
       })
+
       window.scrollTo({
         top: 0,
         left: 0,
         bahavior: 'smooth',
       })
-      //if I add this to the table, the purchaser's id most match the user's ID
-      const ADD_EVENTS_CROSS_USERS = await supabase
-        .from('events_cross_users')
-        .insert({
-          event_id: event_id,
-          user_id: user.user.id,
-        })
-      if (ADD_EVENTS_CROSS_USERS.error) {
-        console.log(
-          'error adding user to the event :',
-          ADD_EVENTS_CROSS_USERS.error
-        )
-      }
-      console.log(ADD_EVENTS_CROSS_USERS.data)
     } else {
       console.log('whats wrong :', paymentResult)
     }

@@ -5,6 +5,7 @@ import Homepage from './pages/Homepage'
 import ProfilePage from './pages/ProfilePage'
 import EventsPage from './pages/EventsPage'
 import EventPage from './pages/EventPage'
+import AboutPage from './pages/AboutPage'
 import CreateEventPage from './pages/CreateEventPage'
 import AuthPage from './pages/AuthPage'
 import PaywallPage from './pages/PaywallPage'
@@ -24,6 +25,7 @@ function App() {
       <EventsContextProvider>
         <UserContextProvider>
           <div className="container">
+            {/* <div className="relative p-0 m-0 min-w-[100vw] min-h-[100vh] flex flex-col items-center overflow-hidden md:max-w-[70vw] "> */}
             <Navbar />
             <Routes>
               <Route exact path="/" element={<Homepage />} />
@@ -32,6 +34,7 @@ function App() {
                 <Route path="/events" element={<EventsPage />} />
                 <Route path="/events/:identifier" element={<EventPage />} />
               </Route>
+              <Route exact path="/about" element={<AboutPage />} />
               <Route exact path="/createevent" element={<CreateEventPage />} />
               <Route exact path="/logpage">
                 <Route exact path="/logpage" element={<AuthPage />} />
