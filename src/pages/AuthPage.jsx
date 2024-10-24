@@ -3,8 +3,8 @@
  * - re add email confirmation
  */
 
-import {useState} from 'react'
-import {supabase} from '../functions/functions'
+import { useState } from 'react'
+import { supabase } from '../functions/functions'
 
 import AuthCard from '../components/AuthComponents'
 import {
@@ -13,13 +13,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '../@/components/ui/accordion'
-import {Input} from '../@/components/ui/input'
-import {Label} from '../@/components/ui/label'
-import {Button} from '../@/components/ui/button'
-import {useNavigate} from 'react-router-dom'
+import { Input } from '../@/components/ui/input'
+import { Label } from '../@/components/ui/label'
+import { Button } from '../@/components/ui/button'
+import { useNavigate } from 'react-router-dom'
 
 const SignupCard = () => {
   const navigate = useNavigate()
+  const [displayError, setDisplayError] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -30,8 +31,8 @@ const SignupCard = () => {
   }
 
   const SignUp = async (formJson) => {
-    const {email, password, first_name, last_name} = formJson
-    const {data, error} = await supabase.auth.signUp({
+    const { email, password, first_name, last_name } = formJson
+    const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
       options: {
@@ -43,6 +44,7 @@ const SignupCard = () => {
     })
     if (error) {
       console.log(error)
+      setDisplayError(true)
       return error
     }
 
@@ -65,8 +67,6 @@ const SignupCard = () => {
       return
     }
 
-    // navigate('confirm_email_page')
-    // window.scrollTo(0, 0)
     return
   }
 
@@ -127,6 +127,11 @@ const SignupCard = () => {
                 Create account
               </Button>
             </div>
+
+            {displayError && <div className='p-2 mt-4'>
+              <p className=" p-2 rounded mt-2 border-red-600 bg-red-900 bg-opacity-50 text-red-500 text-xs">
+                oulaa.. There's been a problem creating your </p>
+            </div>}
           </form>
         </div>
       </AccordionContent>
@@ -143,13 +148,13 @@ const LoginCard = () => {
     const form = e.target
     const formData = new FormData(form)
     const formJson = Object.fromEntries(formData.entries())
-    const {email, password} = formJson
+    const { email, password } = formJson
     console.log(email, password)
     LogInFunction(email, password)
   }
 
   const LogInFunction = async (email, password) => {
-    const {data, error} = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     })
@@ -232,7 +237,7 @@ const AuthAccordion = () => {
   )
 }
 
-const Container = ({children}) => (
+const Container = ({ children }) => (
   <div className="w-[95vw] mt-[3rem] min-h-[100vh] lg:mt-[5rem] flex flex-col gap-6 items-center pt-[10%] lg:pt-0 lg:w-1/2 ">
     {children}
   </div>
@@ -253,13 +258,13 @@ const Log = () => {
     const form = e.target
     const formData = new FormData(form)
     const formJson = Object.fromEntries(formData.entries())
-    const {email, password} = formJson
+    const { email, password } = formJson
     console.log(email, password)
     logupin(email, password)
   }
 
   const logIn = async (email, password) => {
-    const {data, error} = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     })
@@ -269,16 +274,16 @@ const Log = () => {
     window.scrollTo(0, 0)
     navigate('/')
     console.log(data)
-    return {data}
+    return { data }
   }
 
   const logupin = async (email, password) => {
-    const {data, error} = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
     })
     if (error) {
-      const {data, error} = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
       })
@@ -288,7 +293,7 @@ const Log = () => {
       window.scrollTo(0, 0)
       navigate('/')
       console.log(data)
-      return {data}
+      return { data }
     }
     return data
   }

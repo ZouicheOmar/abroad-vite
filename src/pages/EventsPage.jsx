@@ -1,15 +1,15 @@
 /** @format */
-import {useState, createContext} from 'react'
-import {useEvents} from '../functions/functions'
+import { useState, createContext } from 'react'
+import { useEvents } from '../functions/functions'
 
 // import {useEvents} from '../context/eventStore'
-import {MidCardB, Filters} from '../components/EventRelatedComponents'
-import {Title} from '../components/UIComponents'
+import { MidCardB, Filters } from '../components/EventRelatedComponents'
+import { Title } from '../components/UIComponents'
 
 export const EventsContext = createContext()
 
 function EventsPage() {
-  const {data, loading, error, setData} = useEvents()
+  const { data, loading, error, setData } = useEvents()
   const [defaultEvents, setDefaultEvents] = useState(null)
 
   return (

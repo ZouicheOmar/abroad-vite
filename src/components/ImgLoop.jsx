@@ -20,12 +20,12 @@ function ImgLoop() {
             </p>
           </div>
           <div className="imgloop_loop" onAnimationIteration={rotation}>
-            <img src="./img.jpg" alt="party0" />
-            <img src="./img.jpg" alt="party1" />
-            <img src="./img.jpg" alt="party2" />
-            <img src="./img.jpg" alt="party3" />
-            <img src="./img.jpg" alt="party4" />
-            <img src="./img.jpg" alt="party5" />
+            <img src="./carnon.jpg" alt="party0" />
+            <img src="./carnon.jpg" alt="party1" />
+            <img src="./carnon.jpg" alt="party2" />
+            <img src="./carnon.jpg" alt="party3" />
+            <img src="./carnon.jpg" alt="party4" />
+            <img src="./carnon.jpg" alt="party5" />
           </div>
         </div>
       </>

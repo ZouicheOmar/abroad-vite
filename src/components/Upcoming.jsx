@@ -1,16 +1,16 @@
 /** @format */
-import {useEvents, useImage} from '../functions/functions'
-import {useNavigate} from 'react-router-dom'
+import { useEvents, useImage } from '../functions/functions'
+import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
-import {useCallback} from 'react'
+import { useCallback } from 'react'
 
-import {makeFirstLetterUpperCase} from '../functions/textFormattingFunctions'
+import { makeFirstLetterUpperCase } from '../functions/textFormattingFunctions'
 
 // import {Skeleton} from '../../@/components/ui/skeleton'
 
-function Card({data}) {
-  const {name, date, city, type, img_url, id} = data
-  const {imgdata, imgloading, imgerror} = useImage(img_url)
+function Card({ data }) {
+  const { name, date, city, type, img_url, id } = data
+  const { imgdata, imgloading, imgerror } = useImage(img_url)
   const navigate = useNavigate()
 
   const handleClick = useCallback(() => {
@@ -43,9 +43,9 @@ function Card({data}) {
   )
 }
 
-function AfterSMCard({data}) {
-  const {name, date, city, type, img_url, id} = data
-  const {imgdata, imgloading, imgerror} = useImage(img_url)
+function AfterSMCard({ data }) {
+  const { name, date, city, type, img_url, id } = data
+  const { imgdata, imgloading, imgerror } = useImage(img_url)
   const navigate = useNavigate()
 
   const handleClick = useCallback(() => {
@@ -85,7 +85,7 @@ function AfterSMCard({data}) {
   )
 }
 function UpcomingOG() {
-  const {data, error, loading} = useEvents()
+  const { data, error, loading } = useEvents()
 
   return (
     <>
@@ -105,14 +105,15 @@ function UpcomingOG() {
 }
 
 function Upcoming() {
-  const {data, error, loading} = useEvents()
+  const { data, error, loading } = useEvents()
 
   return (
     <>
       <div className="upcoming min-w-full sm:w-[50%] sm:overflow-hidden ">
         <p className="text-2xl font-bold pl-4">Upcoming Events</p>
-        <div className="flex gap-2  sm:mt-2 ">
-          {loading && <p className="text-3xl">loading...</p>}
+        {loading && <p className="text-3xl">loading...</p>}
+        {error && <p className="text-xl text-center"> problem fetching </p>}
+        <div className="flex gap-2 sm:mt-2 ">
           {data && (
             <>
               <div className="sm:hidden body">
@@ -129,7 +130,6 @@ function Upcoming() {
               </div>
             </>
           )}
-          {error && null}
         </div>
       </div>
     </>

@@ -1,17 +1,17 @@
 /** @format */
-import {useCallback, useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './components.scss'
-import {supabase} from '../functions/functions'
-import {useUser} from '../context/userStore'
+import { supabase } from '../functions/functions'
+import { useUser } from '../context/userStore'
 
-import {UserIcon, MenuIcon} from './Icons'
+import { UserIcon, MenuIcon } from './Icons'
 
-import {makeFirstLetterUpperCase} from '../functions/textFormattingFunctions'
+import { makeFirstLetterUpperCase } from '../functions/textFormattingFunctions'
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import {Button} from '../../@/components/ui/button'
-import {Menu} from 'lucide-react'
+import { Button } from '../../@/components/ui/button'
+import { Menu } from 'lucide-react'
 
 const defineRoutes = (route) => {
   switch (route) {
@@ -30,17 +30,13 @@ const defineRoutes = (route) => {
   }
 }
 
-const MobileNavbarMenuItem = ({item}) => {
+const MobileNavbarMenuItem = ({ item }) => {
   const navigate = useNavigate()
 
   const handleClick = (e) => {
     const NAVIGATE_TO = defineRoutes(item)
-    console.log(NAVIGATE_TO)
     navigate(NAVIGATE_TO)
   }
-
-  // const item_style =
-  //   'formadjr border-[1px] rounded-[0.35rem] border-neutral-700 hover:border-neutral-400 my-1 py-1 text-2xl text-center hover:cursor-pointer'
 
   const item_style =
     'formadjr font-bold border-2 border-white py-1 text-2xl pl-[1rem] hover:cursor-pointer text-white'
@@ -56,9 +52,6 @@ const MobileNavbarMenuItem = ({item}) => {
 
 const NavbarMenu = () => {
   const user = useUser()
-  useEffect(() => {
-    console.log('from navbar', user)
-  }, [])
   const menu_content_style =
     'modal p-2 rounded-lg w-[100vw] h-[100vh] data-[state=open]:animate-[opacity-animation-on_300ms] data-[state=closed]:animate-[opacity-animation-off_300ms]'
 
@@ -77,40 +70,22 @@ const NavbarMenu = () => {
   )
 }
 
-/**
- * TODO : refactor : compound all user related action
- * example :
- *  User clicking on profile name in navbar
- *  User clicking on log out
- *  User Clicking on join
- *  etc..
- * All actions should be compound in one reducer
- */
-
 const UserInNavbar = () => {
   const navigate = useNavigate()
-  const {user} = useUser()
+  const { user } = useUser()
 
   const handleLogout = useCallback(async () => {
-    const {error} = supabase.auth.signOut()
+    const { error } = supabase.auth.signOut()
     error && console.log('error loging out : ', error.message)
     navigate('/')
   })
 
   const handleGoToUserPage = useCallback(() => {
-    console.log('user data : ', user)
     navigate(`/logpage/${user.id}`)
   })
 
   return (
     <>
-      {/* <p
-        className="text-sm leading-none hover:cursor-pointer border-[1px] rounded p-1 w-fit h-fit truncate "
-        onClick={handleGoToUserPage}
-      >
-        {user.first_name} <br />
-        {user.last_name}
-      </p> */}
       <span
         className="text-sm leading-none hover:cursor-pointer border-2 rounded-full hover:curtsor-pointer p-1 w-fit h-fit truncate "
         onClick={handleGoToUserPage}
@@ -173,7 +148,7 @@ const DesktopNavbarItems = () => {
 }
 
 function Navbar() {
-  const {user} = useUser()
+  const { user } = useUser()
 
   return (
     <>

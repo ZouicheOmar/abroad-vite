@@ -1,9 +1,9 @@
 /** @format */
 
-import {useEffect, useState} from 'react'
-import {createClient} from '@supabase/supabase-js'
+import { useEffect, useState } from 'react'
+import { createClient } from '@supabase/supabase-js'
 import dayjs from 'dayjs'
-import {useLocation} from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 export const getSupabase = () => {
@@ -40,7 +40,7 @@ export const useEvent = (id) => {
     fetch()
   }, [id])
 
-  return {data, loading, error, img}
+  return { data, loading, error, img }
 }
 
 export const useEvents = () => {
@@ -50,22 +50,23 @@ export const useEvents = () => {
   useEffect(() => {
     const fetch = async () => {
       const events = await supabase.from('events').select()
-      error && console.log(error)
+      if (events.error) {
+        setLoading(false)
+        setError(events.error)
+        return
+      }
       const n = events.data.length
       const w = []
       for (let i = 0; i < n; i++) {
         w.push(events.data[i])
       }
       setLoading(false)
-      if (events.error) {
-        setError(events.error)
-      }
       setData(w)
     }
     fetch()
   }, [])
 
-  return {data, loading, error, setData}
+  return { data, loading, error, setData }
 }
 
 export const useImage = (id) => {
@@ -86,14 +87,14 @@ export const useImage = (id) => {
     fetch()
   }, [])
 
-  return {imgdata, imgloading, imgerror}
+  return { imgdata, imgloading, imgerror }
 }
 
 export const useUserFromProfiles = (id) => {
   const [user, setUser] = useState()
   useEffect(() => {
     const fetchUser = async () => {
-      const {data, error} = await supabase
+      const { data, error } = await supabase
         .from('profiles')
         .select()
         .eq('id', id)
@@ -107,7 +108,7 @@ export const useUserFromProfiles = (id) => {
     fetchUser()
   }, [])
 
-  return {user}
+  return { user }
 }
 
 //----------format-------------------//
